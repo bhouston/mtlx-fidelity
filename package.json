@@ -38,10 +38,18 @@
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^4.1.10",
     "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
     "typescript": "^7",
     "vitest": "^4.1.10"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "oxfmt",
+      "oxlint --fix"
+    ],
+    "*.{json,jsonc,md,mdx,css,html,yml,yaml}": "oxfmt"
   },
   "engines": {
     "node": ">=20.0.0"
