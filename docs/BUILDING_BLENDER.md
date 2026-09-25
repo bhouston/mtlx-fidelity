@@ -1,6 +1,6 @@
 # Building Blender Locally
 
-This repository vendors the patched Blender checkout as `third_party/blender`.
+This repository vendors the patched Blender checkout as `submodules/blender`.
 Build outputs should stay in the ignored repo-local directory:
 
 ```bash
@@ -17,10 +17,10 @@ You can still override this with `BLENDER_NODES_EXECUTABLE`.
 
 ## Precompiled libraries (`lib/macos_arm64`)
 
-CMake expects `third_party/blender/lib/macos_arm64` (see Blender’s build handbook). Populate it either:
+CMake expects `submodules/blender/lib/macos_arm64` (see Blender’s build handbook). Populate it either:
 
-- run `make update` from `third_party/blender` (downloads the official precompiled libs), or
-- point `third_party/blender/lib/macos_arm64` at another checkout that already has those libs (symlink is fine for local use).
+- run `make update` from `submodules/blender` (downloads the official precompiled libs), or
+- point `submodules/blender/lib/macos_arm64` at another checkout that already has those libs (symlink is fine for local use).
 
 ## Xcode Environment
 
@@ -40,7 +40,7 @@ Blender’s CMake initializes **`CMAKE_BUILD_TYPE`** to **`Release`** when unset
 ```bash
 DEVELOPER_DIR="/Applications/Xcode-26.1.1.app/Contents/Developer" \
 SDKROOT="/Applications/Xcode-26.1.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk" \
-cmake -S "$PWD/third_party/blender" \
+cmake -S "$PWD/submodules/blender" \
   -B "$PWD/build/blender" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -95,7 +95,7 @@ CMake and Ninja emit enormous output (often tens of thousands of lines). In Curs
    ```bash
    mkdir -p build/logs
    DEVELOPER_DIR="..." SDKROOT="..." \
-     cmake -S "$PWD/third_party/blender" -B "$PWD/build/blender" -G Ninja ... \
+     cmake -S "$PWD/submodules/blender" -B "$PWD/build/blender" -G Ninja ... \
      >> build/logs/cmake-blender.log 2>&1
    DEVELOPER_DIR="..." SDKROOT="..." \
      ninja -C "$PWD/build/blender" -j 4 >> build/logs/ninja-blender.log 2>&1

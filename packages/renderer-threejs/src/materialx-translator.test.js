@@ -8,16 +8,16 @@ import {
   ImageLoader,
   MirroredRepeatWrapping,
   RepeatWrapping,
-} from '../../../third_party/three.js/build/three.webgpu.js';
-import { MaterialXLoader } from '../../../third_party/three.js/examples/jsm/loaders/MaterialXLoader.js';
-import { createStrictInterfaceValidator } from '../../../third_party/three.js/examples/jsm/loaders/materialx/MaterialXInterfaceValidation.js';
-import { createArchiveResolver } from '../../../third_party/three.js/examples/jsm/loaders/materialx/MaterialXArchive.js';
-import { MaterialXDocument } from '../../../third_party/three.js/examples/jsm/loaders/materialx/MaterialXDocument.js';
+} from '../../../submodules/three.js/build/three.webgpu.js';
+import { MaterialXLoader } from '../../../submodules/three.js/examples/jsm/loaders/MaterialXLoader.js';
+import { createStrictInterfaceValidator } from '../../../submodules/three.js/examples/jsm/loaders/materialx/MaterialXInterfaceValidation.js';
+import { createArchiveResolver } from '../../../submodules/three.js/examples/jsm/loaders/materialx/MaterialXArchive.js';
+import { MaterialXDocument } from '../../../submodules/three.js/examples/jsm/loaders/materialx/MaterialXDocument.js';
 import {
   MaterialXLogCodes,
   MaterialXLog,
-} from '../../../third_party/three.js/examples/jsm/loaders/materialx/MaterialXLog.js';
-import { parseMaterialXNodeTree } from '../../../third_party/three.js/examples/jsm/loaders/materialx/parse/MaterialXParser.js';
+} from '../../../submodules/three.js/examples/jsm/loaders/materialx/MaterialXLog.js';
+import { parseMaterialXNodeTree } from '../../../submodules/three.js/examples/jsm/loaders/materialx/parse/MaterialXParser.js';
 
 function createDomLikeNode(nodeName, nodeValue) {
   const attributes = {};
@@ -63,7 +63,7 @@ function createDomLikeDocument(text) {
 
 function readNodeSample(name) {
   return readFileSync(
-    new URL(`../../../third_party/material-samples/materials/nodes/${name}/${name}.mtlx`, import.meta.url),
+    new URL(`../../../submodules/material-samples/materials/nodes/${name}/${name}.mtlx`, import.meta.url),
     'utf8',
   );
 }
@@ -73,7 +73,7 @@ function readMaterialSample(relativePath) {
 }
 
 function readThreeJsSample(name) {
-  return readMaterialSample(`third_party/material-samples/materials/threejs/${name}/${name}.mtlx`);
+  return readMaterialSample(`submodules/material-samples/materials/threejs/${name}/${name}.mtlx`);
 }
 
 function errorCodes(result) {
@@ -327,7 +327,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
     const loader = new MaterialXLoader();
     const result = loader.parseBuffer(
       readMaterialSample(
-        'third_party/material-samples/materials/surfaces/standard_surface/showcase_graph_pbr_helpers/showcase_graph_pbr_helpers.mtlx',
+        'submodules/material-samples/materials/surfaces/standard_surface/showcase_graph_pbr_helpers/showcase_graph_pbr_helpers.mtlx',
       ),
       'showcase_graph_pbr_helpers.mtlx',
     );
@@ -437,7 +437,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
   it('reports unknown nodedef inputs, invalid output wiring, and type mismatches', () => {
     const loader = new MaterialXLoader();
     const strictValidate = createStrictInterfaceValidator();
-    const texturePath = 'third_party/material-samples/materials/threejs/standard_surface_rotate2d_test/';
+    const texturePath = 'submodules/material-samples/materials/threejs/standard_surface_rotate2d_test/';
     const strictOptions = { interfaceValidator: strictValidate, path: texturePath, throwOnErrors: false };
 
     const rotate2dResult = loader.parseBuffer(

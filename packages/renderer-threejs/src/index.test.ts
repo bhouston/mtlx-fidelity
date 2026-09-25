@@ -38,8 +38,8 @@ async function createFile(filePath: string): Promise<void> {
   await writeFile(filePath, 'x', 'utf8');
 }
 
-async function createRequiredThreeJsFiles(thirdPartyRoot: string): Promise<void> {
-  const threeRoot = path.join(thirdPartyRoot, 'three.js');
+async function createRequiredThreeJsFiles(submodulesRoot: string): Promise<void> {
+  const threeRoot = path.join(submodulesRoot, 'three.js');
   await Promise.all([
     createFile(path.join(threeRoot, 'build', 'three.module.js')),
     createFile(path.join(threeRoot, 'build', 'three.webgpu.js')),
@@ -64,12 +64,12 @@ afterEach(async () => {
 
 describe('threejs renderer', () => {
   it('creates a new page for each render and closes it', async () => {
-    const thirdPartyRoot = await makeTempDir('third-party-');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = await makeTempDir('submodules-');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerRoot = path.join(samplesRoot, 'viewer');
     await createFile(path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'));
     await createFile(path.join(viewerRoot, 'ShaderBall.glb'));
-    await createRequiredThreeJsFiles(thirdPartyRoot);
+    await createRequiredThreeJsFiles(submodulesRoot);
 
     const server = {
       listen: vi.fn<() => Promise<void>>(async () => undefined),
@@ -120,7 +120,7 @@ describe('threejs renderer', () => {
     };
     launchMock.mockResolvedValueOnce(probeBrowser).mockResolvedValueOnce(browser);
 
-    const renderer = createRenderer({ thirdPartyRoot });
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({
       modelPath: path.join(viewerRoot, 'ShaderBall.glb'),
       environmentHdrPath: path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'),
@@ -155,12 +155,12 @@ describe('threejs renderer', () => {
   });
 
   it('returns MaterialX warning and error logs from the capture page', async () => {
-    const thirdPartyRoot = await makeTempDir('third-party-');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = await makeTempDir('submodules-');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerRoot = path.join(samplesRoot, 'viewer');
     await createFile(path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'));
     await createFile(path.join(viewerRoot, 'ShaderBall.glb'));
-    await createRequiredThreeJsFiles(thirdPartyRoot);
+    await createRequiredThreeJsFiles(submodulesRoot);
 
     const server = {
       listen: vi.fn<() => Promise<void>>(async () => undefined),
@@ -213,7 +213,7 @@ describe('threejs renderer', () => {
     };
     launchMock.mockResolvedValueOnce(probeBrowser).mockResolvedValueOnce(browser);
 
-    const renderer = createRenderer({ thirdPartyRoot });
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({
       modelPath: path.join(viewerRoot, 'ShaderBall.glb'),
       environmentHdrPath: path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'),

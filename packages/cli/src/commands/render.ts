@@ -32,9 +32,9 @@ function inferRepoRoot(invocationCwd: string): string {
   return invocationCwd;
 }
 
-function resolveThirdPartyRoot(invocationCwd: string): string {
+function resolveSubmodulesRoot(invocationCwd: string): string {
   const repoRoot = inferRepoRoot(invocationCwd);
-  return path.join(repoRoot, 'third_party');
+  return path.join(repoRoot, 'submodules');
 }
 
 function formatMaterialLabel(materialPath: string, materialsRoot: string): string {
@@ -77,7 +77,7 @@ function renderDiagnosticLogs(logs: RenderLogEntry[] | undefined): string[] {
 interface InkCreateReferencesAppProps {
   args: {
     renderers: FidelityRenderer[];
-    thirdPartyRoot: string;
+    submodulesRoot: string;
     rendererNames: string[];
     concurrency: number;
     materialSelectors: string[];
@@ -110,7 +110,7 @@ function InkCreateReferencesApp({ args, onComplete, onError }: InkCreateReferenc
 
   useEffect(() => {
     let active = true;
-    const materialsRoot = path.join(args.thirdPartyRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(args.submodulesRoot, 'material-samples', 'materials');
 
     const applyProgress = (event: CreateReferencesProgressEvent) => {
       if (!active) {
@@ -154,7 +154,7 @@ function InkCreateReferencesApp({ args, onComplete, onError }: InkCreateReferenc
 
     void createReferences({
       renderers: args.renderers,
-      thirdPartyRoot: args.thirdPartyRoot,
+      submodulesRoot: args.submodulesRoot,
       rendererNames: args.rendererNames,
       concurrency: args.concurrency,
       materialSelectors: args.materialSelectors,
@@ -260,16 +260,16 @@ export const command = defineCommand({
       }),
   handler: async (argv) => {
     const invocationCwd = process.env.INIT_CWD ?? process.cwd();
-    const thirdPartyRoot = resolveThirdPartyRoot(invocationCwd);
+    const submodulesRoot = resolveSubmodulesRoot(invocationCwd);
     const renderers: FidelityRenderer[] = [
-      createBlenderRenderer({ thirdPartyRoot }),
-      createBlenderNodesRenderer({ thirdPartyRoot }),
-      createBlenderEeveeNodesRenderer({ thirdPartyRoot }),
+      createBlenderRenderer({ submodulesRoot }),
+      createBlenderNodesRenderer({ submodulesRoot }),
+      createBlenderEeveeNodesRenderer({ submodulesRoot }),
       createMaterialXGlslRenderer(),
       createMaterialXMetalRenderer(),
       createMaterialXOslRenderer(),
-      createThreeJsNewRenderer({ thirdPartyRoot }),
-      createThreeJsCurrentRenderer({ thirdPartyRoot }),
+      createThreeJsNewRenderer({ submodulesRoot }),
+      createThreeJsCurrentRenderer({ submodulesRoot }),
     ];
     const startedAt = Date.now();
     const materialSelectors = normalizeStringList(argv.materials);
@@ -278,14 +278,14 @@ export const command = defineCommand({
     }
     const commandArgs = {
       renderers,
-      thirdPartyRoot,
+      submodulesRoot,
       rendererNames: resolveRendererNames(renderers, normalizeRendererNames(argv.renderers), { defaultToAll: false }),
       concurrency: Math.max(1, argv.concurrency ?? availableParallelism()),
       materialSelectors: [...new Set(materialSelectors)],
       skipExisting: argv.skipExisting ?? false,
       filter: argv.filter,
     };
-    const materialsRoot = path.join(thirdPartyRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials');
     const isInteractive = process.stdout.isTTY && !process.env.CI;
     const result = isInteractive
       ? await runCreateReferencesWithInk(commandArgs)

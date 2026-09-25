@@ -1,6 +1,6 @@
 # Building MaterialX Locally
 
-This repository vendors the MaterialX checkout as `third_party/MaterialX`.
+This repository vendors the MaterialX checkout as `submodules/MaterialX`.
 Build outputs should stay in ignored repo-local directories under `build/`.
 
 The MaterialXView executable is compiled for one hardware backend at a time, so the fidelity renderers use separate build directories:
@@ -17,14 +17,14 @@ The renderer package automatically prefers these paths before falling back to `m
 
 - CMake and Ninja.
 - Xcode command line tools on macOS.
-- **Open Shading Language (`oslc`, `testrender`)** — required **only** for the **`materialx-osl`** renderer. MaterialX does not ship OSL; point CMake at a consistent install (for example build OSL from **`third_party/OpenShadingLanguage`** into `build/osl-dist/` — see [building-openshadinglanguage.md](building-openshadinglanguage.md)). You can also use Homebrew or another install if you set `MATERIALX_OSL_BINARY_*` accordingly.
-- Nested MaterialX submodules (NanoGUI, etc.): from `third_party/MaterialX`, run `git submodule update --init --recursive`.
+- **Open Shading Language (`oslc`, `testrender`)** — required **only** for the **`materialx-osl`** renderer. MaterialX does not ship OSL; point CMake at a consistent install (for example build OSL from **`submodules/OpenShadingLanguage`** into `build/osl-dist/` — see [building-openshadinglanguage.md](building-openshadinglanguage.md)). You can also use Homebrew or another install if you set `MATERIALX_OSL_BINARY_*` accordingly.
+- Nested MaterialX submodules (NanoGUI, etc.): from `submodules/MaterialX`, run `git submodule update --init --recursive`.
 
 ## Build type (Release vs Debug)
 
 These recipes pass **`-DCMAKE_BUILD_TYPE=Release`** so reference renders use **optimized** binaries.
 
-MaterialX’s CMake does **not** default `CMAKE_BUILD_TYPE` for single-configuration generators (Ninja); without an explicit type, the cache can stay **empty** and you may not get normal Release optimizations. By contrast, **Open Shading Language** (`third_party/OpenShadingLanguage`) sets **`Release`** when `CMAKE_BUILD_TYPE` is unset, and **Blender** initializes **`CMAKE_BUILD_TYPE`** to **`Release`** unless you override it (see [BUILDING_BLENDER.md](BUILDING_BLENDER.md)).
+MaterialX’s CMake does **not** default `CMAKE_BUILD_TYPE` for single-configuration generators (Ninja); without an explicit type, the cache can stay **empty** and you may not get normal Release optimizations. By contrast, **Open Shading Language** (`submodules/OpenShadingLanguage`) sets **`Release`** when `CMAKE_BUILD_TYPE` is unset, and **Blender** initializes **`CMAKE_BUILD_TYPE`** to **`Release`** unless you override it (see [BUILDING_BLENDER.md](BUILDING_BLENDER.md)).
 
 For debugging MaterialX or renderers, reconfigure with **`-DCMAKE_BUILD_TYPE=Debug`** (or **`RelWithDebInfo`**) in the same build directory.
 
@@ -38,7 +38,7 @@ CMake configure steps and `cmake --build` runs print large volumes of text. In L
 
    ```bash
    mkdir -p build/logs
-   cmake -S "$PWD/third_party/MaterialX" -B "$PWD/build/materialx-glsl" -G Ninja \
+   cmake -S "$PWD/submodules/MaterialX" -B "$PWD/build/materialx-glsl" -G Ninja \
      -DCMAKE_BUILD_TYPE=Release \
      -DMATERIALX_BUILD_VIEWER=ON ... \
      >> build/logs/cmake-materialx-glsl.log 2>&1
@@ -51,7 +51,7 @@ CMake configure steps and `cmake --build` runs print large volumes of text. In L
 2. **Submodule init** can also be heavy; redirect it the same way:
 
    ```bash
-   (cd third_party/MaterialX && git submodule update --init --recursive) \
+   (cd submodules/MaterialX && git submodule update --init --recursive) \
      >> build/logs/materialx-submodules.log 2>&1
    ```
 
@@ -64,7 +64,7 @@ CMake configure steps and `cmake --build` runs print large volumes of text. In L
 On macOS, force the OpenGL backend so this build can be used as the `materialx-glsl` reference renderer:
 
 ```bash
-cmake -S "$PWD/third_party/MaterialX" \
+cmake -S "$PWD/submodules/MaterialX" \
   -B "$PWD/build/materialx-glsl" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -83,7 +83,7 @@ cmake --build "$PWD/build/materialx-glsl" --target MaterialXView
 Build a separate Metal-backed MaterialXView for the `materialx-metal` reference renderer:
 
 ```bash
-cmake -S "$PWD/third_party/MaterialX" \
+cmake -S "$PWD/submodules/MaterialX" \
   -B "$PWD/build/materialx-metal" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -102,10 +102,10 @@ cmake --build "$PWD/build/materialx-metal" --target MaterialXView
 
 Configure the OSL renderer with explicit paths to **`oslc`** and **`testrender`** from your Open Shading Language installation.
 
-**Recommended (repo-local install prefix):** build OSL from **`third_party/OpenShadingLanguage`** into **`build/osl-dist`** (full macOS/Homebrew recipe with **`fmt`** / **`CPATH`** and log files: [building-openshadinglanguage.md](building-openshadinglanguage.md)), then configure **`materialx-osl`**:
+**Recommended (repo-local install prefix):** build OSL from **`submodules/OpenShadingLanguage`** into **`build/osl-dist`** (full macOS/Homebrew recipe with **`fmt`** / **`CPATH`** and log files: [building-openshadinglanguage.md](building-openshadinglanguage.md)), then configure **`materialx-osl`**:
 
 ```bash
-cmake -S "$PWD/third_party/MaterialX" \
+cmake -S "$PWD/submodules/MaterialX" \
   -B "$PWD/build/materialx-osl" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -122,7 +122,7 @@ cmake -S "$PWD/third_party/MaterialX" \
 
 ```bash
 mkdir -p build/logs
-cmake -S "$PWD/third_party/MaterialX" \
+cmake -S "$PWD/submodules/MaterialX" \
   -B "$PWD/build/materialx-osl" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \

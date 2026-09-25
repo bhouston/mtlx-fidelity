@@ -84,10 +84,10 @@ describe('calculateImageSimilarityMetrics', () => {
 describe('calculateMetrics', () => {
   it('writes per-material metrics for selected renderers', async () => {
     const root = await makeTempDir('fidelity-metrics-');
-    const thirdPartyRoot = path.join(root, 'third_party');
-    const materialDir = path.join(thirdPartyRoot, 'material-samples', 'materials', 'surfaces', 'gltf_pbr', 'included');
+    const submodulesRoot = path.join(root, 'submodules');
+    const materialDir = path.join(submodulesRoot, 'material-samples', 'materials', 'surfaces', 'gltf_pbr', 'included');
     const skippedMaterialDir = path.join(
-      thirdPartyRoot,
+      submodulesRoot,
       'material-samples',
       'materials',
       'surfaces',
@@ -102,7 +102,7 @@ describe('calculateMetrics', () => {
     await writeFile(path.join(materialDir, 'threejs-new.png'), createSolidPngBuffer(255, 255, 255));
 
     const result = await calculateMetrics({
-      thirdPartyRoot,
+      submodulesRoot,
       rendererNames: ['materialx-glsl', 'threejs-new'],
       materialSelectors: ['included'],
       concurrency: 1,

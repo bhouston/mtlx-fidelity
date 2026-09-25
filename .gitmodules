@@ -1,27 +1,24 @@
 [submodule "third_party/material-samples"]
-	path = third_party/material-samples
+	path = submodules/material-samples
 	url = git@github.com:bhouston/material-samples.git
 [submodule "third_party/material-viewer"]
-	path = third_party/material-viewer
+	path = submodules/material-viewer
 	url = git@github.com:bhouston/material-viewer.git
-[submodule "third_party/blender_materialx_addon"]
-	path = third_party/blender_materialx_addon
-	url = git@github.com:bhouston/blender_materialx_addon.git
 [submodule "third_party/blender-materialx-importer"]
-	path = third_party/blender-materialx-importer
+	path = submodules/blender-materialx-importer
 	url = git@github.com:bhouston/blender-materialx-importer.git
 [submodule "third_party/three.js"]
-	path = third_party/three.js
+	path = submodules/three.js
 	url = git@github.com:bhouston/three.js.git
 	branch = materialx-upgrade
 [submodule "third_party/blender"]
-	path = third_party/blender
+	path = submodules/blender
 	url = git@git.blender.org:Ben-Houston/blender.git
 	branch = materialx-noise-nodes
 [submodule "third_party/MaterialX"]
-	path = third_party/MaterialX
+	path = submodules/MaterialX
 	url = git@github.com:bhouston/MaterialX.git
 	branch = combined2
 [submodule "third_party/OpenShadingLanguage"]
-	path = third_party/OpenShadingLanguage
+	path = submodules/OpenShadingLanguage
 	url = git@github.com:AcademySoftwareFoundation/OpenShadingLanguage.git

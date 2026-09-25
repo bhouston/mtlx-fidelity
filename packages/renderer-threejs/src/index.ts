@@ -38,8 +38,8 @@ const GPU_BROWSER_ARGS = ['--enable-gpu', '--ignore-gpu-blocklist', '--enable-we
 const POST_IDLE_DELAY_MS = 150;
 const POST_IDLE_RENDER_PASSES = 3;
 
-function createVendoredThreeAliases(thirdPartyRoot: string): { find: string | RegExp; replacement: string }[] {
-  const threeRoot = join(thirdPartyRoot, 'three.js');
+function createVendoredThreeAliases(submodulesRoot: string): { find: string | RegExp; replacement: string }[] {
+  const threeRoot = join(submodulesRoot, 'three.js');
   return [
     { find: /^three$/, replacement: join(threeRoot, 'build', 'three.module.js') },
     { find: /^three\/webgpu$/, replacement: join(threeRoot, 'build', 'three.webgpu.js') },
@@ -176,7 +176,7 @@ class ThreeJsRenderer implements FidelityRenderer {
   public readonly version = '0.1.0';
   public readonly category = 'rasterizer';
   public readonly emptyReferenceImagePath: string;
-  private readonly thirdPartyRoot: string;
+  private readonly submodulesRoot: string;
   private readonly materialXLoaderVariant: MaterialXLoaderVariant;
   private prerequisitesValidated = false;
   private runtimeState: RuntimeState | undefined;
@@ -191,7 +191,7 @@ class ThreeJsRenderer implements FidelityRenderer {
   ) {
     this.name = options.name;
     this.materialXLoaderVariant = options.materialXLoaderVariant;
-    this.thirdPartyRoot = context.thirdPartyRoot;
+    this.submodulesRoot = context.submodulesRoot;
     const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
     this.emptyReferenceImagePath = join(packageRoot, 'threejs-empty.png');
   }
@@ -202,11 +202,11 @@ class ThreeJsRenderer implements FidelityRenderer {
     }
 
     try {
-      const samplesRoot = join(this.thirdPartyRoot, 'material-samples');
+      const samplesRoot = join(this.submodulesRoot, 'material-samples');
       const viewerRoot = join(samplesRoot, 'viewer');
       const requiredFiles = [join(viewerRoot, VIEWER_HDR_FILENAME), join(viewerRoot, VIEWER_MODEL_FILENAME)];
       if (this.materialXLoaderVariant === 'custom') {
-        const threeRoot = join(this.thirdPartyRoot, 'three.js');
+        const threeRoot = join(this.submodulesRoot, 'three.js');
         requiredFiles.push(
           join(threeRoot, 'build', 'three.module.js'),
           join(threeRoot, 'build', 'three.webgpu.js'),
@@ -254,7 +254,7 @@ class ThreeJsRenderer implements FidelityRenderer {
       plugins: [react()],
       resolve: usesVendoredThree
         ? {
-            alias: createVendoredThreeAliases(this.thirdPartyRoot),
+            alias: createVendoredThreeAliases(this.submodulesRoot),
           }
         : undefined,
       server: {
@@ -262,7 +262,7 @@ class ThreeJsRenderer implements FidelityRenderer {
         port: 0,
         strictPort: false,
         fs: {
-          allow: [viewerAppRoot, this.thirdPartyRoot],
+          allow: [viewerAppRoot, this.submodulesRoot],
         },
       },
     });
@@ -373,7 +373,7 @@ class ThreeJsRenderer implements FidelityRenderer {
           'interfaceValidatorPath',
           toFsUrlPath(
             join(
-              this.thirdPartyRoot,
+              this.submodulesRoot,
               'three.js',
               'examples',
               'jsm',
@@ -435,7 +435,7 @@ class ThreeJsRenderer implements FidelityRenderer {
 
 export function createRenderer(context?: RendererContext): FidelityRenderer {
   if (!context) {
-    throw new Error('ThreeJS New renderer requires renderer context with thirdPartyRoot.');
+    throw new Error('ThreeJS New renderer requires renderer context with submodulesRoot.');
   }
 
   return new ThreeJsRenderer(context, {
@@ -446,7 +446,7 @@ export function createRenderer(context?: RendererContext): FidelityRenderer {
 
 export function createCurrentRenderer(context?: RendererContext): FidelityRenderer {
   if (!context) {
-    throw new Error('ThreeJS Current renderer requires renderer context with thirdPartyRoot.');
+    throw new Error('ThreeJS Current renderer requires renderer context with submodulesRoot.');
   }
 
   return new ThreeJsRenderer(context, {

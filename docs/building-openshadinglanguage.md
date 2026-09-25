@@ -2,7 +2,7 @@
 
 The **`materialx-osl`** reference renderer compiles generated shaders with **`oslc`** and renders with **`testrender`**. Those programs come from the **Open Shading Language** project, not from MaterialX. MaterialX’s CMake accepts explicit paths (`MATERIALX_OSL_BINARY_OSLC`, `MATERIALX_OSL_BINARY_TESTRENDER`, optional `MATERIALX_OSL_INCLUDE_PATH`), so installing OSL into a **fixed directory under this repo’s `build/` tree** keeps references reproducible.
 
-This repository vendors OSL source as **`third_party/OpenShadingLanguage`** ([AcademySoftwareFoundation/OpenShadingLanguage](https://github.com/AcademySoftwareFoundation/OpenShadingLanguage)).
+This repository vendors OSL source as **`submodules/OpenShadingLanguage`** ([AcademySoftwareFoundation/OpenShadingLanguage](https://github.com/AcademySoftwareFoundation/OpenShadingLanguage)).
 
 ## Relationship to MaterialX
 
@@ -13,7 +13,7 @@ This repository vendors OSL source as **`third_party/OpenShadingLanguage`** ([Ac
 
 OSL depends on LLVM, OpenImageIO, Imath, and other libraries. Follow the upstream guide for your platform:
 
-- [`third_party/OpenShadingLanguage/INSTALL.md`](../third_party/OpenShadingLanguage/INSTALL.md)
+- [`submodules/OpenShadingLanguage/INSTALL.md`](../submodules/OpenShadingLanguage/INSTALL.md)
 
 On macOS, Homebrew packages such as `llvm`, `openimageio`, `imath`, `flex`, `bison`, `pugixml`, and **`fmt`** are commonly used; exact versions are listed in that file.
 
@@ -41,7 +41,7 @@ export CPLUS_INCLUDE_PATH="$(brew --prefix fmt)/include"
 PF="$(brew --prefix llvm);$(brew --prefix openimageio);$(brew --prefix imath);$(brew --prefix pugixml);$(brew --prefix zlib);$(brew --prefix fmt)"
 
 mkdir -p build/logs
-cmake -S "$PWD/third_party/OpenShadingLanguage" \
+cmake -S "$PWD/submodules/OpenShadingLanguage" \
   -B "$PWD/build/osl-cmake" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -55,10 +55,10 @@ cmake -S "$PWD/third_party/OpenShadingLanguage" \
 
 ninja -C "$PWD/build/osl-cmake" install >> build/logs/build-osl-install.log 2>&1
 
-( cd "$PWD/third_party/MaterialX" && git submodule update --init --recursive ) \
+( cd "$PWD/submodules/MaterialX" && git submodule update --init --recursive ) \
   >> build/logs/materialx-submodules.log 2>&1
 
-cmake -S "$PWD/third_party/MaterialX" -B "$PWD/build/materialx-osl" -G Ninja \
+cmake -S "$PWD/submodules/MaterialX" -B "$PWD/build/materialx-osl" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DMATERIALX_BUILD_VIEWER=OFF \
   -DMATERIALX_BUILD_RENDER=ON \
@@ -92,7 +92,7 @@ Configure (full output to logs):
 
 ```bash
 mkdir -p build/logs
-cmake -S "$PWD/third_party/OpenShadingLanguage" \
+cmake -S "$PWD/submodules/OpenShadingLanguage" \
   -B "$PWD/build/osl-cmake" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -124,7 +124,7 @@ ninja -C "$PWD/build/osl-cmake" install >> build/logs/build-osl-install.log 2>&1
 
 ```bash
 mkdir -p build/logs
-cmake -S "$PWD/third_party/OpenShadingLanguage" \
+cmake -S "$PWD/submodules/OpenShadingLanguage" \
   -B "$PWD/build/osl-cmake" \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -141,7 +141,7 @@ cmake --build "$PWD/build/osl-cmake" --target install \
 Reconfigure the MaterialX **`materialx-osl`** build so `oslc` / `testrender` paths are **baked in** at compile time:
 
 ```bash
-cmake -S "$PWD/third_party/MaterialX" -B "$PWD/build/materialx-osl" -G Ninja \
+cmake -S "$PWD/submodules/MaterialX" -B "$PWD/build/materialx-osl" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DMATERIALX_BUILD_VIEWER=OFF \
   -DMATERIALX_BUILD_RENDER=ON \

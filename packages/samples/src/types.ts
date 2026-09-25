@@ -63,7 +63,7 @@ export interface MtlzMetadata {
 
 export interface SampleRoots {
   repoRoot: string;
-  thirdPartyRoot: string;
+  submodulesRoot: string;
   samplesRoot: string;
   materialsRoot: string;
 }

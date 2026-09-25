@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Normalize MaterialX sample layout.
 
-Transforms each material directory under `third_party/material-samples/materials` to:
+Transforms each material directory under `submodules/material-samples/materials` to:
 - one `.mtlx` file named after the material directory
 - texture assets under `textures/`
 - `.mtlx` filename references rewritten to `textures/<basename>`
@@ -221,7 +221,7 @@ def main(argv: Sequence[str]) -> int:
     parser.add_argument(
         "--materials-root",
         type=Path,
-        default=Path("third_party/material-samples/materials"),
+        default=Path("submodules/material-samples/materials"),
         help="Path to material-samples materials root",
     )
     parser.add_argument("--apply", action="store_true", help="Apply changes. Default is dry-run.")

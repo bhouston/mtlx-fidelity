@@ -2,8 +2,8 @@ import { dirname, joinPath } from './path-utils.js';
 
 export const METRICS_FILE_NAME = 'metrics.json';
 
-export function getSamplesRootFromThirdParty(thirdPartyRoot: string): string {
-  return joinPath(thirdPartyRoot, 'material-samples');
+export function getSamplesRootFromSubmodules(submodulesRoot: string): string {
+  return joinPath(submodulesRoot, 'material-samples');
 }
 
 export function getMaterialsRoot(samplesRoot: string): string {

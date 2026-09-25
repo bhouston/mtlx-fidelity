@@ -6,8 +6,8 @@
   "files": [],
   "include": [],
   "references": [
-    { "path": "./third_party/material-viewer/packages/mtlx-core" },
-    { "path": "./third_party/material-viewer/packages/materialx-three" },
+    { "path": "./submodules/material-viewer/packages/mtlx-core" },
+    { "path": "./submodules/material-viewer/packages/materialx-three" },
     { "path": "./packages/samples" },
     { "path": "./packages/samples-io" },
     { "path": "./packages/core" },

@@ -13,7 +13,7 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && pnpm --filter ./third_party/three.js build && pnpm -r --if-present --filter '!./third_party/three.js' build",
+    "build": "tsc -b && pnpm --filter ./submodules/three.js build && pnpm -r --if-present --filter '!./submodules/three.js' build",
     "dev": "pnpm -r --parallel --stream dev",
     "clean": "rimraf dist packages/**/dist",
     "clean:all": "pnpm clean && rimraf node_modules packages/**/node_modules",

@@ -1,7 +1,7 @@
 packages:
   - packages/*
-  - third_party/material-viewer/packages/*
-  - third_party/three.js
+  - submodules/material-viewer/packages/*
+  - submodules/three.js
 
 allowBuilds:
   '@parcel/watcher': true

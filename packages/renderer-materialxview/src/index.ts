@@ -16,7 +16,7 @@ import type { RenderLogEntry } from '@material-fidelity/samples';
 
 const PACKAGE_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = join(PACKAGE_ROOT, '..', '..');
-const LOCAL_MATERIALX_SOURCE_ROOT = join(REPOSITORY_ROOT, 'third_party', 'MaterialX');
+const LOCAL_MATERIALX_SOURCE_ROOT = join(REPOSITORY_ROOT, 'submodules', 'MaterialX');
 const LOCAL_MATERIALX_BUILD_ROOT = join(REPOSITORY_ROOT, 'build');
 const GLSL_EXECUTABLE_CANDIDATES = [
   join(LOCAL_MATERIALX_BUILD_ROOT, 'materialx-glsl', 'bin', 'MaterialXView'),

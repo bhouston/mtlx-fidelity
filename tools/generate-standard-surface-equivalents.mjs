@@ -217,7 +217,7 @@ async function pathExists(filePath) {
 
 async function main() {
   const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-  const samplesRoot = path.join(repoRoot, 'third_party', 'material-samples', 'materials');
+  const samplesRoot = path.join(repoRoot, 'submodules', 'material-samples', 'materials');
   const sourceRoot = path.join(samplesRoot, 'gltf_pbr');
   const targetRoot = path.join(samplesRoot, 'standard_surface');
 

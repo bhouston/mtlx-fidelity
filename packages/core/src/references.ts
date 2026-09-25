@@ -3,7 +3,7 @@ import { access, mkdir, rename, rm, writeFile } from 'node:fs/promises';
 import pLimit from 'p-limit';
 import {
   getMaterialsRoot,
-  getSamplesRootFromThirdParty,
+  getSamplesRootFromSubmodules,
   getViewerAssetsRoot,
   materialMatchesSelector,
   RenderLogEntrySchema,
@@ -127,7 +127,7 @@ async function fileExists(filePath: string): Promise<boolean> {
 }
 
 export async function createReferences(options: CreateReferencesOptions): Promise<CreateReferencesResult> {
-  const samplesRoot = getSamplesRootFromThirdParty(options.thirdPartyRoot);
+  const samplesRoot = getSamplesRootFromSubmodules(options.submodulesRoot);
   const materialsRoot = getMaterialsRoot(samplesRoot);
   const viewerRoot = getViewerAssetsRoot(samplesRoot);
 

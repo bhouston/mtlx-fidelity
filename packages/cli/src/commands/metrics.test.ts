@@ -88,9 +88,9 @@ describe('metrics command', () => {
       rendererNames: ['materialx-glsl', 'threejs-new'],
       materialSelectors: ['included', '/noise/i', 'stdlib'],
       concurrency: 2,
-      thirdPartyRoot: expect.any(String),
+      submodulesRoot: expect.any(String),
     });
-    expect(firstCall?.[0].thirdPartyRoot.endsWith('/third_party')).toBe(true);
+    expect(firstCall?.[0].submodulesRoot.endsWith('/submodules')).toBe(true);
   });
 
   it('defaults to all built-in renderers', async () => {

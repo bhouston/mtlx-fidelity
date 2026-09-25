@@ -4,7 +4,7 @@
     "correctness": "error",
     "suspicious": "warn"
   },
-  "ignorePatterns": ["third_party/**"],
+  "ignorePatterns": ["submodules/**"],
   "plugins": ["eslint", "typescript", "oxc", "unicorn", "vitest"],
   "rules": {
     "eslint/no-underscore-dangle": "off"

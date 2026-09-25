@@ -11,7 +11,7 @@ from typing import Dict, Iterable, List, Tuple
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SURFACE_ROOT = REPO_ROOT / "third_party" / "material-samples" / "materials" / "surfaces"
+SURFACE_ROOT = REPO_ROOT / "submodules" / "material-samples" / "materials" / "surfaces"
 SURFACE_FAMILIES = ("standard_surface", "gltf_pbr", "open_pbr_surface")
 VALUE_TOKEN_TO_FLOAT = {
     "0_00": 0.00,

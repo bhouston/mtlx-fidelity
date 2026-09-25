@@ -30,17 +30,17 @@ async function createFile(filePath: string): Promise<void> {
   await writeFile(filePath, 'x', 'utf8');
 }
 
-async function createBlenderMaterialXImporterFiles(thirdPartyRoot: string): Promise<void> {
+async function createBlenderMaterialXImporterFiles(submodulesRoot: string): Promise<void> {
   await Promise.all([
-    createFile(path.join(thirdPartyRoot, 'blender-materialx-importer', 'materialx_importer', '__init__.py')),
-    createFile(path.join(thirdPartyRoot, 'blender-materialx-importer', 'materialx_importer', 'importer.py')),
+    createFile(path.join(submodulesRoot, 'blender-materialx-importer', 'materialx_importer', '__init__.py')),
+    createFile(path.join(submodulesRoot, 'blender-materialx-importer', 'materialx_importer', 'importer.py')),
   ]);
 }
 
-async function makeBlenderThirdPartyRoot(): Promise<string> {
-  const thirdPartyRoot = await makeTempDir('blender-third-party-');
-  await createBlenderMaterialXImporterFiles(thirdPartyRoot);
-  return thirdPartyRoot;
+async function makeBlenderSubmodulesRoot(): Promise<string> {
+  const submodulesRoot = await makeTempDir('blender-submodules-');
+  await createBlenderMaterialXImporterFiles(submodulesRoot);
+  return submodulesRoot;
 }
 
 function mockSuccessfulPrerequisites(version = '4.2.0'): void {
@@ -150,15 +150,15 @@ afterEach(async () => {
 
 describe('blender renderer', () => {
   it('exposes the Blender renderer names', () => {
-    expect(createRenderer({ thirdPartyRoot: '/tmp/third_party' }).name).toBe('blender-new');
-    expect(createNodesRenderer({ thirdPartyRoot: '/tmp/third_party' }).name).toBe('blender-nodes');
-    expect(createEeveeNodesRenderer({ thirdPartyRoot: '/tmp/third_party' }).name).toBe('blender-eevee-nodes');
+    expect(createRenderer({ submodulesRoot: '/tmp/submodules' }).name).toBe('blender-new');
+    expect(createNodesRenderer({ submodulesRoot: '/tmp/submodules' }).name).toBe('blender-nodes');
+    expect(createEeveeNodesRenderer({ submodulesRoot: '/tmp/submodules' }).name).toBe('blender-eevee-nodes');
   });
 
   it('exposes renderer categories', () => {
-    expect(createRenderer({ thirdPartyRoot: '/tmp/third_party' }).category).toBe('pathtracer');
-    expect(createNodesRenderer({ thirdPartyRoot: '/tmp/third_party' }).category).toBe('pathtracer');
-    expect(createEeveeNodesRenderer({ thirdPartyRoot: '/tmp/third_party' }).category).toBe('rasterizer');
+    expect(createRenderer({ submodulesRoot: '/tmp/submodules' }).category).toBe('pathtracer');
+    expect(createNodesRenderer({ submodulesRoot: '/tmp/submodules' }).category).toBe('pathtracer');
+    expect(createEeveeNodesRenderer({ submodulesRoot: '/tmp/submodules' }).category).toBe('rasterizer');
   });
 
   it('requires custom MaterialX nodes for the blender-nodes renderer', async () => {
@@ -172,8 +172,8 @@ describe('blender renderer', () => {
         stderr: 'RuntimeError: Missing MaterialX custom Blender nodes: ShaderNodeMxNoise2D\n',
       });
 
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createNodesRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createNodesRenderer({ submodulesRoot });
     const result = await renderer.checkPrerequisites();
 
     expect(result.success).toBe(false);
@@ -192,8 +192,8 @@ describe('blender renderer', () => {
         stderr: 'RuntimeError: Missing MaterialX custom Blender nodes: ShaderNodeMxNoise2D\n',
       });
 
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createEeveeNodesRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createEeveeNodesRenderer({ submodulesRoot });
     const result = await renderer.checkPrerequisites();
 
     expect(result.success).toBe(false);
@@ -203,8 +203,8 @@ describe('blender renderer', () => {
   it('reports missing Blender prerequisites', async () => {
     spawnSyncMock.mockReturnValue({ error: new Error('not found'), status: null, stdout: '', stderr: '' });
 
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
     const result = await renderer.checkPrerequisites();
 
     expect(result.success).toBe(false);
@@ -217,8 +217,8 @@ describe('blender renderer', () => {
       .mockReturnValueOnce({ status: 0, stdout: 'Blender 4.2.0\n', stderr: '' })
       .mockReturnValueOnce({ status: 1, stdout: '', stderr: 'ModuleNotFoundError: MaterialX\n' });
 
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
     const result = await renderer.checkPrerequisites();
 
     expect(result.success).toBe(false);
@@ -242,16 +242,16 @@ describe('blender renderer', () => {
         ].join('\n'),
       },
     ]);
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const viewerRoot = path.join(thirdPartyRoot, 'material-samples', 'viewer');
-    const materialsRoot = path.join(thirdPartyRoot, 'material-samples', 'materials', 'example');
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const viewerRoot = path.join(submodulesRoot, 'material-samples', 'viewer');
+    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials', 'example');
     const materialPath = path.join(materialsRoot, 'example.mtlx');
     const outputPath = path.join(materialsRoot, 'blender-new-temp.png');
     const modelPath = path.join(viewerRoot, 'ShaderBall.glb');
     const environmentHdrPath = path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr');
     await Promise.all([createFile(materialPath), createFile(modelPath), createFile(environmentHdrPath)]);
 
-    const renderer = createRenderer({ thirdPartyRoot });
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({ modelPath, environmentHdrPath, backgroundColor: '0,0,0' });
     const result = await renderer.generateImage({
       mtlxPath: materialPath,
@@ -276,8 +276,8 @@ describe('blender renderer', () => {
         environmentHdrPath,
         '--background-color',
         '0,0,0',
-        '--third-party-root',
-        thirdPartyRoot,
+        '--submodules-root',
+        submodulesRoot,
         '--renderer-name',
         'blender-new',
         '--render-engine',
@@ -298,8 +298,8 @@ describe('blender renderer', () => {
         outputPath,
         '--background-color',
         '0,0,0',
-        '--third-party-root',
-        thirdPartyRoot,
+        '--submodules-root',
+        submodulesRoot,
         '--renderer-name',
         'blender-new',
         '--render-engine',
@@ -321,16 +321,16 @@ describe('blender renderer', () => {
       { code: 0, stdout: 'template created\n' },
       { code: 0, stdout: 'render finished\n' },
     ]);
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const viewerRoot = path.join(thirdPartyRoot, 'material-samples', 'viewer');
-    const materialsRoot = path.join(thirdPartyRoot, 'material-samples', 'materials', 'example');
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const viewerRoot = path.join(submodulesRoot, 'material-samples', 'viewer');
+    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials', 'example');
     const materialPath = path.join(materialsRoot, 'example.mtlx');
     const outputPath = path.join(materialsRoot, 'blender-eevee-nodes.png');
     const modelPath = path.join(viewerRoot, 'ShaderBall.glb');
     const environmentHdrPath = path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr');
     await Promise.all([createFile(materialPath), createFile(modelPath), createFile(environmentHdrPath)]);
 
-    const renderer = createEeveeNodesRenderer({ thirdPartyRoot });
+    const renderer = createEeveeNodesRenderer({ submodulesRoot });
     await renderer.start({ modelPath, environmentHdrPath, backgroundColor: '0,0,0' });
     await renderer.generateImage({
       mtlxPath: materialPath,
@@ -351,8 +351,8 @@ describe('blender renderer', () => {
   it('requires PNG output paths', async () => {
     mockSuccessfulPrerequisites();
     mockSpawnExitAndCreateTemplate(0, 'template created\n');
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({
       modelPath: '/tmp/model.glb',
       environmentHdrPath: '/tmp/environment.hdr',
@@ -373,8 +373,8 @@ describe('blender renderer', () => {
       { code: 0, stdout: 'template created\n' },
       { code: 1, stdout: 'render started\n', stderr: 'render failed\n' },
     ]);
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({
       modelPath: '/tmp/model.glb',
       environmentHdrPath: '/tmp/environment.hdr',
@@ -398,8 +398,8 @@ describe('blender renderer', () => {
   it('removes the temporary template directory during shutdown', async () => {
     mockSuccessfulPrerequisites();
     mockSpawnExitAndCreateTemplate(0, 'template created\n');
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
     await renderer.start({
       modelPath: '/tmp/model.glb',
       environmentHdrPath: '/tmp/environment.hdr',
@@ -419,8 +419,8 @@ describe('blender renderer', () => {
   it('reports template creation when Blender exits without writing the template file', async () => {
     mockSuccessfulPrerequisites();
     mockSpawnExit(0, 'template skipped\n');
-    const thirdPartyRoot = await makeBlenderThirdPartyRoot();
-    const renderer = createRenderer({ thirdPartyRoot });
+    const submodulesRoot = await makeBlenderSubmodulesRoot();
+    const renderer = createRenderer({ submodulesRoot });
 
     await expect(
       renderer.start({

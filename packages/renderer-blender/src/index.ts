@@ -52,8 +52,8 @@ interface BlenderRendererOptions {
   scriptFileName: string;
   renderEngine: string;
   minimumBlenderVersion: BlenderVersion;
-  requiredThirdPartyFiles?: string[][];
-  runtimePythonExpression?: (thirdPartyRoot: string) => string;
+  requiredSubmoduleFiles?: string[][];
+  runtimePythonExpression?: (submodulesRoot: string) => string;
   executableCandidates?: (packageRoot: string) => string[];
   executableNotFoundMessage?: (candidates: string[]) => string;
 }
@@ -64,7 +64,7 @@ const BLENDER_RENDERER_OPTIONS: BlenderRendererOptions = {
   scriptFileName: 'render_materialx.py',
   renderEngine: 'CYCLES',
   minimumBlenderVersion: { major: 4, minor: 0, patch: 0 },
-  requiredThirdPartyFiles: BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES,
+  requiredSubmoduleFiles: BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES,
 };
 
 function createBlenderNodesExecutableCandidates(packageRoot: string): string[] {
@@ -85,7 +85,7 @@ const BLENDER_NODES_RENDERER_OPTIONS: BlenderRendererOptions = {
   scriptFileName: 'render_materialx.py',
   renderEngine: 'CYCLES',
   minimumBlenderVersion: { major: 4, minor: 0, patch: 0 },
-  requiredThirdPartyFiles: BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES,
+  requiredSubmoduleFiles: BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES,
   executableCandidates: createBlenderNodesExecutableCandidates,
   executableNotFoundMessage: (candidates) => createBlenderNodesExecutableNotFoundMessage('blender-nodes', candidates),
   runtimePythonExpression: () => createMxCustomNodeProbeExpression(),
@@ -525,7 +525,7 @@ class BlenderRenderer implements FidelityRenderer {
   public readonly emptyReferenceImagePath: string;
   private readonly options: BlenderRendererOptions;
   private readonly packageRoot: string;
-  private readonly thirdPartyRoot: string;
+  private readonly submodulesRoot: string;
   private executable: string | undefined;
   private prerequisitesValidated = false;
   private templateDirectory: string | undefined;
@@ -537,7 +537,7 @@ class BlenderRenderer implements FidelityRenderer {
     this.name = options.name;
     this.category = options.category;
     this.options = options;
-    this.thirdPartyRoot = context.thirdPartyRoot;
+    this.submodulesRoot = context.submodulesRoot;
     this.packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
     this.emptyReferenceImagePath = join(this.packageRoot, 'blender-empty.png');
   }
@@ -557,7 +557,7 @@ class BlenderRenderer implements FidelityRenderer {
       const missingFiles: string[] = [];
       const requiredFiles = [
         scriptPath,
-        ...(this.options.requiredThirdPartyFiles ?? []).map((parts) => join(this.thirdPartyRoot, ...parts)),
+        ...(this.options.requiredSubmoduleFiles ?? []).map((parts) => join(this.submodulesRoot, ...parts)),
       ];
       for (const filePath of requiredFiles) {
         try {
@@ -573,7 +573,7 @@ class BlenderRenderer implements FidelityRenderer {
       const runtimeCheck = checkBlenderRuntime(
         executable,
         this.options.minimumBlenderVersion,
-        this.options.runtimePythonExpression?.(this.thirdPartyRoot),
+        this.options.runtimePythonExpression?.(this.submodulesRoot),
       );
       if (!runtimeCheck.success) {
         this.prerequisitesValidated = false;
@@ -625,8 +625,8 @@ class BlenderRenderer implements FidelityRenderer {
       String(REFERENCE_IMAGE_WIDTH),
       '--height',
       String(REFERENCE_IMAGE_HEIGHT),
-      '--third-party-root',
-      this.thirdPartyRoot,
+      '--submodules-root',
+      this.submodulesRoot,
       '--renderer-name',
       this.name,
       '--render-engine',
@@ -688,8 +688,8 @@ class BlenderRenderer implements FidelityRenderer {
       String(REFERENCE_IMAGE_WIDTH),
       '--height',
       String(REFERENCE_IMAGE_HEIGHT),
-      '--third-party-root',
-      this.thirdPartyRoot,
+      '--submodules-root',
+      this.submodulesRoot,
       '--renderer-name',
       this.name,
       '--render-engine',

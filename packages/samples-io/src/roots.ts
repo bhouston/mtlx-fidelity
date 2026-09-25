@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { getMaterialsRoot, getSamplesRootFromThirdParty, type SampleRoots } from '@material-fidelity/samples';
+import { getMaterialsRoot, getSamplesRootFromSubmodules, type SampleRoots } from '@material-fidelity/samples';
 
 const cachedRootsByInvocationCwd = new Map<string, SampleRoots>();
 
@@ -20,13 +20,13 @@ export function resolveSampleRoots(invocationCwd: string = process.env.INIT_CWD 
   }
 
   const repoRoot = inferRepoRoot(invocationCwd);
-  const thirdPartyRoot = path.join(repoRoot, 'third_party');
-  const samplesRoot = getSamplesRootFromThirdParty(thirdPartyRoot);
+  const submodulesRoot = path.join(repoRoot, 'submodules');
+  const samplesRoot = getSamplesRootFromSubmodules(submodulesRoot);
   const materialsRoot = getMaterialsRoot(samplesRoot);
 
   const resolvedRoots = {
     repoRoot,
-    thirdPartyRoot,
+    submodulesRoot,
     samplesRoot,
     materialsRoot,
   };

@@ -123,12 +123,12 @@ export interface ViewerIndexViewModel {
   rendererGroups: RendererCategoryGroupViewModel[];
   groups: MaterialTypeGroupViewModel[];
   errors: string[];
-  resolvedThirdPartyRoot: string;
+  resolvedSubmodulesRoot: string;
 }
 
 export interface ViewerRoots {
   repoRoot: string;
-  thirdPartyRoot: string;
+  submodulesRoot: string;
   materialsRoot: string;
 }
 
@@ -136,7 +136,7 @@ export function resolveViewerRoots(): ViewerRoots {
   const roots = resolveSampleRoots();
   return {
     repoRoot: roots.repoRoot,
-    thirdPartyRoot: roots.thirdPartyRoot,
+    submodulesRoot: roots.submodulesRoot,
     materialsRoot: roots.materialsRoot,
   };
 }
@@ -205,7 +205,7 @@ async function buildViewerIndexData(): Promise<ViewerIndexViewModel> {
       rendererGroups: [],
       groups: [],
       errors,
-      resolvedThirdPartyRoot: roots.thirdPartyRoot,
+      resolvedSubmodulesRoot: roots.submodulesRoot,
     };
   }
 
@@ -296,7 +296,7 @@ async function buildViewerIndexData(): Promise<ViewerIndexViewModel> {
     rendererGroups,
     groups,
     errors,
-    resolvedThirdPartyRoot: roots.thirdPartyRoot,
+    resolvedSubmodulesRoot: roots.submodulesRoot,
   };
 }
 

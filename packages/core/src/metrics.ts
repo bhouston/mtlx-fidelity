@@ -3,7 +3,7 @@ import path from 'node:path';
 import pLimit from 'p-limit';
 import {
   getMaterialsRoot,
-  getSamplesRootFromThirdParty,
+  getSamplesRootFromSubmodules,
   materialMatchesSelector,
   metricsPathForMaterialFile,
 } from '@material-fidelity/samples';
@@ -17,7 +17,7 @@ const METRICS_DECIMAL_PLACES = 3;
 export type { ImageSimilarityMetrics, MaterialMetricsFile } from '@material-fidelity/samples';
 
 export interface CalculateMetricsOptions {
-  thirdPartyRoot: string;
+  submodulesRoot: string;
   rendererNames?: string[];
   materialSelectors?: string[];
   concurrency: number;
@@ -151,7 +151,7 @@ async function calculateMetricsForMaterial(
 }
 
 export async function calculateMetrics(options: CalculateMetricsOptions): Promise<CalculateMetricsResult> {
-  const samplesRoot = getSamplesRootFromThirdParty(options.thirdPartyRoot);
+  const samplesRoot = getSamplesRootFromSubmodules(options.submodulesRoot);
   const materialsRoot = getMaterialsRoot(samplesRoot);
 
   if (!(await fileExists(samplesRoot))) {

@@ -34,11 +34,11 @@ export interface FidelityRenderer {
 }
 
 export interface RendererContext {
-  thirdPartyRoot: string;
+  submodulesRoot: string;
 }
 
 export interface CreateReferencesOptions {
-  thirdPartyRoot: string;
+  submodulesRoot: string;
   renderers: FidelityRenderer[];
   rendererNames?: string[];
   materialSelectors?: string[];

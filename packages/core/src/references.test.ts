@@ -128,8 +128,8 @@ afterEach(async () => {
 describe('createReferences', () => {
   it('renders a png named after the adapter beside each material', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
@@ -153,7 +153,7 @@ describe('createReferences', () => {
     );
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 2,
@@ -189,8 +189,8 @@ describe('createReferences', () => {
 
   it('keeps the existing png when the rendered image RMS delta is at or below threshold', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
 
@@ -203,7 +203,7 @@ describe('createReferences', () => {
     await writeFile(path.join(materialDir, 'fake.webp'), 'legacy webp', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -219,8 +219,8 @@ describe('createReferences', () => {
 
   it('replaces the existing png when rendered RMS delta is above threshold', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
 
@@ -232,7 +232,7 @@ describe('createReferences', () => {
     await writeFile(path.join(materialDir, 'fake.png'), BLACK_PIXEL_PNG_BUFFER);
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -247,8 +247,8 @@ describe('createReferences', () => {
 
   it('skips renderer/sample pairs that already have a png when skipExisting is enabled', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const existingDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'existing');
     const missingDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'missing');
     const viewerDir = path.join(samplesRoot, 'viewer');
@@ -268,7 +268,7 @@ describe('createReferences', () => {
     await writeFile(path.join(missingDir, 'alt.png'), BLACK_PIXEL_PNG_BUFFER);
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer, skippedRenderer],
       rendererNames: ['fake', 'alt'],
       concurrency: 1,
@@ -289,8 +289,8 @@ describe('createReferences', () => {
 
   it('requires the expected viewer hdr and mesh filenames', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
@@ -326,7 +326,7 @@ export function createAdapter() {
 
     await expect(
       createReferences({
-        thirdPartyRoot,
+        submodulesRoot,
         renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
         rendererNames: ['fake'],
         concurrency: 1,
@@ -336,8 +336,8 @@ export function createAdapter() {
 
   it('applies materialSelectors to material paths', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
     const includedDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'included');
@@ -364,7 +364,7 @@ export function createAdapter() {
     );
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 2,
@@ -380,8 +380,8 @@ export function createAdapter() {
 
   it('discovers showcase materials recursively', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const showcaseDir = path.join(samplesRoot, 'materials', 'showcase', 'gltf_pbr', 'showcase-glass');
     const surfacesDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'surface-plastic');
@@ -396,7 +396,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 2,
@@ -410,8 +410,8 @@ export function createAdapter() {
 
   it('supports regex material selectors against material directory names', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
     const includedDir = path.join(samplesRoot, 'materials', 'surfaces', 'gltf_pbr', 'included');
@@ -438,7 +438,7 @@ export function createAdapter() {
     );
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 2,
@@ -454,8 +454,8 @@ export function createAdapter() {
 
   it('does not match material selectors against parent directories', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const includedDir = path.join(samplesRoot, 'materials', 'surfaces', 'gltf_pbr', 'included');
     const skippedDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'skipped');
@@ -471,7 +471,7 @@ export function createAdapter() {
 
     await expect(
       createReferences({
-        thirdPartyRoot,
+        submodulesRoot,
         renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
         rendererNames: ['fake'],
         concurrency: 2,
@@ -485,8 +485,8 @@ export function createAdapter() {
 
   it('emits progress events with adapter names for each render task', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
     const materialOneDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'mat-one');
@@ -514,7 +514,7 @@ export function createAdapter() {
 
     const events: Array<{ phase: string; rendererName: string }> = [];
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -532,8 +532,8 @@ export function createAdapter() {
 
   it('defaults to all renderers when rendererNames is omitted', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const fakeAdapterDir = path.join(root, 'adapters', 'fake');
@@ -569,7 +569,7 @@ export function createAdapter() {
     );
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [
         createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake'),
         createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'alt'),
@@ -586,8 +586,8 @@ export function createAdapter() {
 
   it('queues renders in material-first then adapter order', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const firstMaterialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'mat-one');
     const secondMaterialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'mat-two');
@@ -627,7 +627,7 @@ export function createAdapter() {
 
     const startEvents: Array<{ materialPath: string; rendererName: string }> = [];
     await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [
         createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake'),
         createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'alt'),
@@ -653,8 +653,8 @@ export function createAdapter() {
 
   it('marks blank-reference-similar renders as empty failures', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
@@ -680,7 +680,7 @@ export function createAdapter() {
     await writeFile(path.join(materialDir, 'fake.png'), 'stale png from previous run', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -713,8 +713,8 @@ export function createAdapter() {
 
   it('deletes an existing png when a renderer throws a failure', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'renderer-throws');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const renderer = createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -731,7 +731,7 @@ export function createAdapter() {
     await writeFile(path.join(materialDir, 'fake.png'), 'stale png from previous run', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -745,13 +745,13 @@ export function createAdapter() {
 
   it('fails early when material-samples directory is missing', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
+    const submodulesRoot = path.join(root, 'submodules');
 
     await mkdir(path.join(root, 'adapters'), { recursive: true });
 
     await expect(
       createReferences({
-        thirdPartyRoot,
+        submodulesRoot,
         renderers: [],
         concurrency: 1,
       }),
@@ -760,8 +760,8 @@ export function createAdapter() {
 
   it('fails early when an adapter prerequisite check fails', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'default');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const adapterDir = path.join(root, 'adapters', 'fake');
@@ -799,7 +799,7 @@ export function createAdapter() {
 
     await expect(
       createReferences({
-        thirdPartyRoot,
+        submodulesRoot,
         renderers: [createFailingPrerequisiteRenderer('fake')],
         rendererNames: ['fake'],
         concurrency: 1,
@@ -809,8 +809,8 @@ export function createAdapter() {
 
   it('marks malformed material xml as a task failure and continues', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'broken');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const { renderer, state } = createTrackingRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -822,7 +822,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -844,8 +844,8 @@ export function createAdapter() {
 
   it('marks unsupported node categories as a task failure and continues', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'unsupported');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const { renderer, state } = createTrackingRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -861,7 +861,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -878,8 +878,8 @@ export function createAdapter() {
 
   it('marks missing texture references as a task failure and continues', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'missing-texture');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const { renderer, state } = createTrackingRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -901,7 +901,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -918,8 +918,8 @@ export function createAdapter() {
 
   it('renders valid materials even when another material fails validation', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const invalidMaterialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'invalid-one');
     const validMaterialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'valid-one');
     const viewerDir = path.join(samplesRoot, 'viewer');
@@ -933,7 +933,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
       rendererNames: ['fake'],
       concurrency: 2,
@@ -952,8 +952,8 @@ export function createAdapter() {
 
   it('continues rendering and writes warnings for URI texture references', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'uri-texture');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
@@ -976,7 +976,7 @@ export function createAdapter() {
 
     try {
       const result = await createReferences({
-        thirdPartyRoot,
+        submodulesRoot,
         renderers: [createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake')],
         rendererNames: ['fake'],
         concurrency: 1,
@@ -994,8 +994,8 @@ export function createAdapter() {
 
   it('filters debug logs from successful render reports', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'log-filter-success');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const renderer = createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -1037,7 +1037,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,
@@ -1057,8 +1057,8 @@ export function createAdapter() {
 
   it('filters debug logs from renderer errors', async () => {
     const root = await makeTempDir('fidelity-');
-    const thirdPartyRoot = path.join(root, 'third-party');
-    const samplesRoot = path.join(thirdPartyRoot, 'material-samples');
+    const submodulesRoot = path.join(root, 'submodules');
+    const samplesRoot = path.join(submodulesRoot, 'material-samples');
     const materialDir = path.join(samplesRoot, 'materials', 'surfaces', 'standard_surface', 'log-filter-failure');
     const viewerDir = path.join(samplesRoot, 'viewer');
     const renderer = createPngWriterRenderer(NON_BLACK_PIXEL_PNG_BASE64, 'fake');
@@ -1078,7 +1078,7 @@ export function createAdapter() {
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
 
     const result = await createReferences({
-      thirdPartyRoot,
+      submodulesRoot,
       renderers: [renderer],
       rendererNames: ['fake'],
       concurrency: 1,

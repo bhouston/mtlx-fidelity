@@ -136,11 +136,11 @@ describe('render command', () => {
     expect(firstCall).toBeDefined();
     expect(firstCall?.[0]).toMatchObject({
       rendererNames: ['materialx-glsl'],
-      thirdPartyRoot: expect.any(String),
+      submodulesRoot: expect.any(String),
       concurrency: 2,
       skipExisting: false,
     });
-    expect(firstCall?.[0].thirdPartyRoot.endsWith('/third_party')).toBe(true);
+    expect(firstCall?.[0].submodulesRoot.endsWith('/submodules')).toBe(true);
     expect(firstCall?.[0].renderers).toHaveLength(8);
   });
 

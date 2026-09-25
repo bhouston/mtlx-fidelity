@@ -31,9 +31,9 @@ function inferRepoRoot(invocationCwd: string): string {
   return invocationCwd;
 }
 
-function resolveThirdPartyRoot(invocationCwd: string): string {
+function resolveSubmodulesRoot(invocationCwd: string): string {
   const repoRoot = inferRepoRoot(invocationCwd);
-  return path.join(repoRoot, 'third_party');
+  return path.join(repoRoot, 'submodules');
 }
 
 function getDefaultConcurrency(): number {
@@ -58,16 +58,16 @@ function normalizeStringList(rawValues: unknown): string[] {
   ];
 }
 
-function createBuiltInRenderers(thirdPartyRoot: string): FidelityRenderer[] {
+function createBuiltInRenderers(submodulesRoot: string): FidelityRenderer[] {
   return [
-    createBlenderRenderer({ thirdPartyRoot }),
-    createBlenderNodesRenderer({ thirdPartyRoot }),
-    createBlenderEeveeNodesRenderer({ thirdPartyRoot }),
+    createBlenderRenderer({ submodulesRoot }),
+    createBlenderNodesRenderer({ submodulesRoot }),
+    createBlenderEeveeNodesRenderer({ submodulesRoot }),
     createMaterialXGlslRenderer(),
     createMaterialXMetalRenderer(),
     createMaterialXOslRenderer(),
-    createThreeJsNewRenderer({ thirdPartyRoot }),
-    createThreeJsCurrentRenderer({ thirdPartyRoot }),
+    createThreeJsNewRenderer({ submodulesRoot }),
+    createThreeJsCurrentRenderer({ submodulesRoot }),
   ];
 }
 
@@ -78,7 +78,7 @@ function formatMetricsResult(result: CalculateMetricsResult, elapsedSeconds: num
 
 interface InkCalculateMetricsAppProps {
   args: {
-    thirdPartyRoot: string;
+    submodulesRoot: string;
     rendererNames: string[];
     materialSelectors: string[];
     concurrency: number;
@@ -99,7 +99,7 @@ function InkCalculateMetricsApp({ args, onComplete, onError }: InkCalculateMetri
 
   useEffect(() => {
     let active = true;
-    const materialsRoot = path.join(args.thirdPartyRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(args.submodulesRoot, 'material-samples', 'materials');
 
     const applyProgress = (event: CalculateMetricsProgressEvent) => {
       if (!active) {
@@ -232,8 +232,8 @@ export const command = defineCommand({
       }),
   handler: async (argv) => {
     const invocationCwd = process.env.INIT_CWD ?? process.cwd();
-    const thirdPartyRoot = resolveThirdPartyRoot(invocationCwd);
-    const renderers = createBuiltInRenderers(thirdPartyRoot);
+    const submodulesRoot = resolveSubmodulesRoot(invocationCwd);
+    const renderers = createBuiltInRenderers(submodulesRoot);
     const materialSelectors = normalizeStringList(argv.materials);
     if (argv.filter && argv.filter.trim().length > 0) {
       materialSelectors.push(argv.filter);
@@ -242,7 +242,7 @@ export const command = defineCommand({
     const startedAt = Date.now();
     const rendererNames = resolveRendererNames(renderers, normalizeStringList(argv.renderers), { defaultToAll: true });
     const commandArgs = {
-      thirdPartyRoot,
+      submodulesRoot,
       rendererNames,
       materialSelectors: [...new Set(materialSelectors)],
       concurrency: Math.max(1, argv.concurrency ?? getDefaultConcurrency()),
