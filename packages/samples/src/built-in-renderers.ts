@@ -60,19 +60,20 @@ export const BUILT_IN_RENDERER_DESCRIPTORS: RendererDescriptor[] = [
     name: 'threejs-current',
     category: 'rasterizer',
     sortIndex: 50,
-    description: 'Built-in Three.js MaterialX loader',
+    description: 'Built-in Three.js MaterialX loader from the official release (three@0.186.1, 2026-09-24)',
     packageName: '@mtlx-fidelity/renderer-threejs',
-    sourceName: 'Three.js',
-    sourceUrl: 'https://github.com/mrdoob/three.js',
+    sourceName: 'Three.js r186',
+    sourceUrl: 'https://github.com/mrdoob/three.js/releases/tag/r186',
   },
   {
     name: 'threejs-new',
     category: 'rasterizer',
     sortIndex: 60,
-    description: 'Experimental MaterialX loader',
+    description:
+      'Experimental MaterialX loader from Three.js PR #34593, built on top of the mrdoob/three.js dev branch',
     packageName: '@mtlx-fidelity/renderer-threejs',
-    sourceName: 'Three.js PR #33485',
-    sourceUrl: 'https://github.com/mrdoob/three.js/pull/33485',
+    sourceName: 'Three.js PR #34593',
+    sourceUrl: 'https://github.com/mrdoob/three.js/pull/34593',
   },
 ];
 
