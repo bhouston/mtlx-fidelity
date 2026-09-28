@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { readFile } from 'node:fs/promises';
-import { rendererPngPath } from '@mtlx-fidelity/samples';
+import { rendererImagePath } from '@mtlx-fidelity/samples';
 import { pathExists, resolveMaterialDirectory, resolveSampleRoots } from '@mtlx-fidelity/samples-io';
 import { contentHashFromBytes, referenceAssetGetResponse } from '#/lib/reference-asset-response.server';
 
@@ -29,7 +29,7 @@ export const Route = createFileRoute('/api/reference-image/$materialType/$materi
           return new Response('Not found', { status: 404 });
         }
 
-        const filePath = rendererPngPath(materialDirectory, params.adapter);
+        const filePath = rendererImagePath(materialDirectory, params.adapter);
         if (!(await pathExists(filePath))) {
           return new Response('Not found', { status: 404 });
         }
@@ -37,7 +37,7 @@ export const Route = createFileRoute('/api/reference-image/$materialType/$materi
         const bytes = await readFile(filePath);
         const requestImageHash = new URL(request.url).searchParams.get(IMAGE_CONTENT_HASH_QUERY_PARAM);
         if (process.env.NODE_ENV !== 'production') {
-          return referenceAssetGetResponse(request, bytes, 'image/png', { noStore: true });
+          return referenceAssetGetResponse(request, bytes, 'image/avif', { noStore: true });
         }
 
         if (!requestImageHash) {
@@ -49,7 +49,7 @@ export const Route = createFileRoute('/api/reference-image/$materialType/$materi
           return noStoreErrorResponse('Invalid image content hash');
         }
 
-        return referenceAssetGetResponse(request, bytes, 'image/png', {
+        return referenceAssetGetResponse(request, bytes, 'image/avif', {
           contentHash: imageHash,
           immutable: true,
         });

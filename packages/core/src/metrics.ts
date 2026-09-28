@@ -6,6 +6,7 @@ import {
   getSamplesRootFromSubmodules,
   materialMatchesSelector,
   metricsPathForMaterialFile,
+  rendererImagePath,
 } from '@mtlx-fidelity/samples';
 import { findMtlxMaterialFiles } from '@mtlx-fidelity/samples-io';
 import type { ImageSimilarityMetrics, MaterialMetricsFile } from '@mtlx-fidelity/samples';
@@ -71,7 +72,7 @@ function toMetricsPath(materialPath: string): string {
 }
 
 function toRendererImagePath(materialPath: string, rendererName: string): string {
-  return path.join(path.dirname(materialPath), `${rendererName}.png`);
+  return rendererImagePath(path.dirname(materialPath), rendererName);
 }
 
 function roundMetric(value: number): number {
@@ -136,15 +137,15 @@ async function calculateMetricsForMaterial(
 
   const metrics: MaterialMetricsFile = {};
   for (const rendererName of rendererNames) {
-    const rendererImagePath = toRendererImagePath(materialPath, rendererName);
-    if (!(await fileExists(rendererImagePath))) {
+    const imagePath = toRendererImagePath(materialPath, rendererName);
+    if (!(await fileExists(imagePath))) {
       continue;
     }
 
     metrics[rendererName] =
       rendererName === REFERENCE_RENDERER_NAME
         ? createPerfectMetrics()
-        : await calculateImageSimilarityMetrics(rendererImagePath, referenceImagePath);
+        : await calculateImageSimilarityMetrics(imagePath, referenceImagePath);
   }
 
   return metrics;

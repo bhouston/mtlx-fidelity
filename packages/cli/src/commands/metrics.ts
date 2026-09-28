@@ -208,7 +208,7 @@ async function runCalculateMetricsWithInk(args: InkCalculateMetricsAppProps['arg
 
 export const command = defineCommand({
   command: 'metrics',
-  describe: 'Calculate PSNR for rendered PNG images.',
+  describe: 'Calculate PSNR for rendered AVIF images.',
   builder: (yargs) =>
     yargs
       .option('renderers', {
