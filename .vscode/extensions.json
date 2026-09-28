@@ -1,3 +1,10 @@
 {
-  "recommendations": ["oxc.oxc-vscode"]
+  "recommendations": [
+    "benhouston3d.mtlx-vscode-extension",
+    "benhouston3d.hdrify-vscode-extension",
+    "vitest.explorer",
+    "oxc.oxc-vscode",
+    "github.vscode-github-actions",
+    "typescriptteam.native-preview"
+  ]
 }

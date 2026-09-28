@@ -1,7 +1,6 @@
 {
   "editor.rulers": [120],
   "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "file",
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": {
@@ -11,9 +10,8 @@
   "editor.codeActionsOnPaste": {
     "source.fixAll.oxc": "explicit"
   },
+  "workbench.editor.enablePreview": false,
   "oxc.typeAware": true,
   "oxc.useExecPath": true,
-  "[json]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
+  "editor.formatOnSaveMode": "file"
 }

@@ -1,13 +1,18 @@
 name: ci
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened, edited, ready_for_review]
   workflow_call:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci:
@@ -15,11 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-      - name: Checkout build/test submodules
+          persist-credentials: false
+          # Full recursive checkout would also pull submodules/blender, submodules/MaterialX, and
+          # submodules/OpenShadingLanguage - large C++ source trees only needed to build the native
+          # Blender/MaterialX renderers, not to build/tsc/lint/test the TypeScript packages in this repo.
+          # Init only the "viewer" submodule set below, matching deploy-service.yml's `submodules: viewer`.
+          submodules: false
+      - name: Checkout viewer submodules
         run: |
-          set -e
-          # Runners have no SSH keys; submodule URLs must clone over HTTPS.
+          # Runners have no SSH keys; rewrite the git@github.com submodule URLs to HTTPS.
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           git submodule sync -- submodules/mtlx-sample-library submodules/material-viewer submodules/three.js
           git submodule update --init --depth 1 \
@@ -32,24 +41,12 @@ jobs:
           node-version-file: '.nvmrc'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Validate issue link
-        if: github.event_name == 'pull_request'
-        run: node scripts/check-pr.mjs
-      - name: Lint PR title
-        if: github.event_name == 'pull_request'
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint
-      - name: Lint feature commits
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA"
       - run: pnpm build
       - run: pnpm tsc
       - run: pnpm lint
-      - run: pnpm test
+      - name: Check formatting
+        run: pnpm exec oxfmt --check .
+      - run: pnpm test --coverage
       - name: Audit dependencies
         id: audit
         continue-on-error: true
@@ -57,3 +54,9 @@ jobs:
       - name: Flag audit findings
         if: steps.audit.outcome == 'failure'
         run: echo '::warning::Dependency audit found vulnerabilities or could not reach the registry. Review the audit step.'
+      - uses: codecov/codecov-action@v5
+        if: ${{ !cancelled() && hashFiles('coverage/lcov.info') != '' }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: false

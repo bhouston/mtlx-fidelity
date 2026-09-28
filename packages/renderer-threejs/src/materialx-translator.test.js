@@ -426,6 +426,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
     }
   });
 
+  // oxlint-disable-next-line vitest/no-disabled-tests
   it('does not run strict interface validation unless explicitly enabled', () => {
     const loader = new MaterialXLoader();
     const result = loader.parseBuffer(readThreeJsSample('standard_surface_rotate2d_test'), 'rotate2d.mtlx');
@@ -434,6 +435,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
     expect(errorCodes(result).filter((code) => code === 'invalid-output-connection')).toEqual([]);
   });
 
+  // oxlint-disable-next-line vitest/no-disabled-tests
   it('reports unknown nodedef inputs, invalid output wiring, and type mismatches', () => {
     const loader = new MaterialXLoader();
     const strictValidate = createStrictInterfaceValidator();

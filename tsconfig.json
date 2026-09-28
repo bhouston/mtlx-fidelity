@@ -1,19 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true
-  },
   "files": [],
-  "include": [],
-  "references": [
-    { "path": "./submodules/material-viewer/packages/mtlx-core" },
-    { "path": "./submodules/material-viewer/packages/materialx-three" },
-    { "path": "./packages/samples" },
-    { "path": "./packages/samples-io" },
-    { "path": "./packages/core" },
-    { "path": "./packages/renderer-blender" },
-    { "path": "./packages/renderer-materialxview" },
-    { "path": "./packages/renderer-threejs" },
-    { "path": "./packages/cli" }
-  ]
+  "include": []
 }

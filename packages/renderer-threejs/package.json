@@ -20,6 +20,7 @@
     }
   },
   "scripts": {
+    "build": "tsc",
     "tsc": "tsc",
     "dev": "tsc -w --preserveWatchOutput"
   },

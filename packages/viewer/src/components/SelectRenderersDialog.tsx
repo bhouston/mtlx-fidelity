@@ -148,6 +148,7 @@ export function SelectRenderersDialog({
                   key={rendererName}
                 >
                   <input
+                    aria-label={rendererName}
                     checked={selectedRendererSet.has(rendererName)}
                     className="mt-1 size-4 accent-primary"
                     onChange={(event) => handleRendererToggle(rendererName, event.currentTarget.checked)}

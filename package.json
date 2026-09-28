@@ -13,7 +13,8 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && pnpm --filter ./submodules/three.js build && pnpm -r --if-present --filter '!./submodules/three.js' build",
+    "build:deps": "tsc -p submodules/material-viewer/packages/mtlx-core && tsc -p submodules/material-viewer/packages/materialx-three",
+    "build": "pnpm build:deps && pnpm --filter ./submodules/three.js build && pnpm -r --if-present --filter './packages/**' build",
     "dev": "pnpm -r --parallel --stream dev",
     "clean": "rimraf dist packages/**/dist",
     "clean:all": "pnpm clean && rimraf node_modules packages/**/node_modules",
@@ -21,7 +22,7 @@
     "format": "oxfmt .",
     "lint": "oxlint packages docs tools vitest.config.ts",
     "lint:fix": "oxlint --fix packages docs tools vitest.config.ts",
-    "tsc": "tsc -b",
+    "tsc": "pnpm build:deps && pnpm -r --if-present --filter './packages/**' tsc",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -34,17 +35,17 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.2.3",
-    "@commitlint/config-conventional": "^21.2.3",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@types/node": "^25.6.0",
     "@types/yargs": "^17.0.35",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
-    "typescript": "^7",
-    "vitest": "^4.1.10"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
@@ -54,7 +55,7 @@
     "*.{json,jsonc,md,mdx,css,html,yml,yaml}": "oxfmt"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22"
   },
-  "packageManager": "pnpm@11.0.8"
+  "packageManager": "pnpm@11.27.0"
 }

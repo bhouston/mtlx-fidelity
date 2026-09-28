@@ -217,6 +217,8 @@ function App() {
     return () => {
       window.clearTimeout(timeoutId);
     };
+    // updateFilters is a new closure every render; adding it here would re-fire the debounce on every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materialFilterInput, search.materials]);
 
   return (
