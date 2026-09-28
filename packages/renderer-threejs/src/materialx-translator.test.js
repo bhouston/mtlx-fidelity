@@ -73,7 +73,7 @@ function readMaterialSample(relativePath) {
 }
 
 function readThreeJsSample(name) {
-  return readMaterialSample(`submodules/material-samples/materials/threejs/${name}/${name}.mtlx`);
+  return readMaterialSample(`submodules/three.js/examples/materialx/${name}.mtlx`);
 }
 
 function errorCodes(result) {
@@ -437,7 +437,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
   it('reports unknown nodedef inputs, invalid output wiring, and type mismatches', () => {
     const loader = new MaterialXLoader();
     const strictValidate = createStrictInterfaceValidator();
-    const texturePath = 'submodules/material-samples/materials/threejs/standard_surface_rotate2d_test/';
+    const texturePath = 'submodules/three.js/examples/materialx/';
     const strictOptions = { interfaceValidator: strictValidate, path: texturePath, throwOnErrors: false };
 
     const rotate2dResult = loader.parseBuffer(
