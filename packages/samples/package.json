@@ -20,7 +20,7 @@
     "dev": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "zod": "^4.3.6"
+    "zod": "^4.6.5"
   },
   "devDependencies": {}
 }
