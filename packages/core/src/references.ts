@@ -1,11 +1,13 @@
 import path from 'node:path';
-import { access, mkdir, rename, rm, writeFile } from 'node:fs/promises';
+import { access, mkdir, rm, writeFile } from 'node:fs/promises';
 import pLimit from 'p-limit';
+import sharp from 'sharp';
 import {
   getMaterialsRoot,
   getSamplesRootFromSubmodules,
   getViewerAssetsRoot,
   materialMatchesSelector,
+  rendererImagePath,
   RenderLogEntrySchema,
   RenderResultReportSchema,
   type RenderLogEntry,
@@ -26,29 +28,31 @@ const VIEWER_HDR_FILENAME = 'san_giuseppe_bridge_2k.hdr';
 const VIEWER_MODEL_FILENAME = 'ShaderBall.glb';
 const DEFAULT_BACKGROUND_COLOR = '0,0,0';
 const RENDER_REPLACE_RMS_THRESHOLD = 0.0002;
+/** Renderers write a temporary PNG; the committed `<renderer>.avif` is encoded with these settings. */
+export const RENDER_AVIF_OPTIONS = { quality: 90, chromaSubsampling: '4:4:4' } as const;
 
 function createOutputPath(materialPath: string, rendererName: string): string {
-  return path.join(path.dirname(materialPath), `${rendererName}.png`);
+  return rendererImagePath(path.dirname(materialPath), rendererName);
 }
 
 function createTempOutputPath(materialPath: string, rendererName: string): string {
   return path.join(path.dirname(materialPath), `${rendererName}-temp.png`);
 }
 
-function toLegacyWebpPath(outputPngPath: string): string {
-  const parsed = path.parse(outputPngPath);
-  return path.join(parsed.dir, `${parsed.name}.webp`);
+function toLegacyImagePaths(outputImagePath: string): string[] {
+  const parsed = path.parse(outputImagePath);
+  return ['.png', '.webp'].map((ext) => path.join(parsed.dir, `${parsed.name}${ext}`));
 }
 
-function toJsonPath(outputPngPath: string): string {
-  const parsedPath = path.parse(outputPngPath);
+function toJsonPath(outputImagePath: string): string {
+  const parsedPath = path.parse(outputImagePath);
   return path.join(parsedPath.dir, `${parsedPath.name}.json`);
 }
 
 interface RenderResultReportOptions {
   rendererName: string;
   materialPath: string;
-  outputPngPath: string;
+  outputImagePath: string;
   success: boolean;
   error?: Error;
   validationIssues?: PreflightIssue[];
@@ -100,7 +104,7 @@ function toRenderReportIssue(issue: PreflightIssue): RenderReportIssue {
 }
 
 async function writeRenderResultReport(options: RenderResultReportOptions): Promise<void> {
-  const reportPath = toJsonPath(options.outputPngPath);
+  const reportPath = toJsonPath(options.outputImagePath);
   const report = RenderResultReportSchema.parse({
     rendererName: options.rendererName,
     status: options.success ? 'success' : 'failed',
@@ -304,25 +308,25 @@ export async function createReferences(options: CreateReferencesOptions): Promis
             return;
           }
 
-          const outputPngPath = createOutputPath(materialPath, renderer.name);
+          const outputImagePath = createOutputPath(materialPath, renderer.name);
           started += 1;
           await options.onProgress?.({
             phase: 'start',
             rendererName: renderer.name,
             materialPath,
-            outputPngPath,
+            outputImagePath,
             total: renderQueue.length,
             started,
             completed,
           });
-          await mkdir(path.dirname(outputPngPath), { recursive: true });
+          await mkdir(path.dirname(outputImagePath), { recursive: true });
 
           let renderError: Error | undefined;
           let validationIssues: PreflightIssue[] | undefined;
           let logs: RenderLogEntry[] = [];
           const startedAt = Date.now();
           const outputTempPngPath = createTempOutputPath(materialPath, renderer.name);
-          const legacyWebpPath = toLegacyWebpPath(outputPngPath);
+          const legacyImagePaths = toLegacyImagePaths(outputImagePath);
           try {
             const validationResult = await getMaterialValidation(materialPath);
             if (validationResult.fatalIssues.length > 0) {
@@ -334,21 +338,18 @@ export async function createReferences(options: CreateReferencesOptions): Promis
               outputPngPath: outputTempPngPath,
             });
             logs = normalizeRenderLogs([...renderResult.logs]);
-            await rm(legacyWebpPath, { force: true });
+            await Promise.all(legacyImagePaths.map((legacyPath) => rm(legacyPath, { force: true })));
             await assertRenderIsNotEmpty(outputTempPngPath, renderer.emptyReferenceImagePath);
-            const hasExistingCanonical = await fileExists(outputPngPath);
-            if (!hasExistingCanonical) {
-              await rename(outputTempPngPath, outputPngPath);
-            } else {
-              const normalizedRms = await calculateImageNormalizedRgbRms(outputTempPngPath, outputPngPath, {
+            const avifBytes = await sharp(outputTempPngPath).avif(RENDER_AVIF_OPTIONS).toBuffer();
+            await rm(outputTempPngPath, { force: true });
+            // Compare encoded against encoded so AVIF loss alone never counts as a change.
+            const shouldWrite =
+              !(await fileExists(outputImagePath)) ||
+              (await calculateImageNormalizedRgbRms(avifBytes, outputImagePath, {
                 treatDimensionMismatchAsMaxDifference: true,
-              });
-              if (normalizedRms > RENDER_REPLACE_RMS_THRESHOLD) {
-                await rm(outputPngPath, { force: true });
-                await rename(outputTempPngPath, outputPngPath);
-              } else {
-                await rm(outputTempPngPath, { force: true });
-              }
+              })) > RENDER_REPLACE_RMS_THRESHOLD;
+            if (shouldWrite) {
+              await writeFile(outputImagePath, avifBytes);
             }
           } catch (error) {
             renderError = error instanceof Error ? error : new Error(String(error));
@@ -357,7 +358,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
 
           if (renderError) {
             await rm(outputTempPngPath, { force: true });
-            await rm(outputPngPath, { force: true });
+            await rm(outputImagePath, { force: true });
           }
 
           const completedAt = Date.now();
@@ -365,7 +366,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
             await writeRenderResultReport({
               rendererName: renderer.name,
               materialPath,
-              outputPngPath,
+              outputImagePath,
               success: !renderError,
               error: renderError,
               validationIssues,
@@ -376,7 +377,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
           }
 
           if (renderError) {
-            failures.push({ rendererName: renderer.name, materialPath, outputPngPath, error: renderError, logs });
+            failures.push({ rendererName: renderer.name, materialPath, outputImagePath, error: renderError, logs });
           }
           attempted += 1;
           completed += 1;
@@ -385,7 +386,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
             phase: 'finish',
             rendererName: renderer.name,
             materialPath,
-            outputPngPath,
+            outputImagePath,
             total: renderQueue.length,
             started,
             completed,

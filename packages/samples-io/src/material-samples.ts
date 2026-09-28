@@ -1,6 +1,6 @@
 import {
   getMaterialsRoot,
-  rendererPngPath,
+  rendererImagePath,
   rendererReportPath,
   sortRendererDescriptors,
   toMaterialDescriptor,
@@ -63,8 +63,8 @@ export class MaterialSamples {
     if (!dir) {
       return undefined;
     }
-    const pngPath = rendererPngPath(dir, rendererName);
-    return (await pathExists(pngPath)) ? pngPath : undefined;
+    const imagePath = rendererImagePath(dir, rendererName);
+    return (await pathExists(imagePath)) ? imagePath : undefined;
   }
 
   async resolveReferenceReportPath(
@@ -110,9 +110,9 @@ export class MaterialSamples {
       const metrics: Record<string, ImageSimilarityMetrics | null> = {};
 
       for (const rendererName of rendererNames) {
-        const pngPath = rendererPngPath(descriptor.absoluteDirectory, rendererName);
+        const imagePath = rendererImagePath(descriptor.absoluteDirectory, rendererName);
         const reportPath = rendererReportPath(descriptor.absoluteDirectory, rendererName);
-        images[rendererName] = (await pathExists(pngPath)) ? pngPath : null;
+        images[rendererName] = (await pathExists(imagePath)) ? imagePath : null;
         const hasReport = await pathExists(reportPath);
         reports[rendererName] = hasReport ? reportPath : null;
         if (hasReport) {

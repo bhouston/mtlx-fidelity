@@ -3,8 +3,9 @@ import { access, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promise
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { PNG } from 'pngjs';
+import sharp from 'sharp';
 import { parseRenderReport } from '@mtlx-fidelity/samples';
-import { createReferences } from './references.js';
+import { createReferences, RENDER_AVIF_OPTIONS } from './references.js';
 import type { FidelityRenderer } from './types.js';
 
 const tempDirs: string[] = [];
@@ -22,6 +23,10 @@ const NON_BLACK_PIXEL_PNG_BASE64 = createSolidPngBase64(255, 0, 0);
 const BLACK_PIXEL_PNG_BASE64 = createSolidPngBase64(0, 0, 0);
 const NON_BLACK_PIXEL_PNG_BUFFER = Buffer.from(NON_BLACK_PIXEL_PNG_BASE64, 'base64');
 const BLACK_PIXEL_PNG_BUFFER = Buffer.from(BLACK_PIXEL_PNG_BASE64, 'base64');
+function encodeAvif(png: Buffer): Promise<Buffer> {
+  return sharp(png).avif(RENDER_AVIF_OPTIONS).toBuffer();
+}
+
 const VALID_MTLX_DOCUMENT = '<materialx version="1.39"></materialx>';
 
 async function makeTempDir(prefix: string): Promise<string> {
@@ -126,7 +131,7 @@ afterEach(async () => {
 });
 
 describe('createReferences', () => {
-  it('renders a png named after the adapter beside each material', async () => {
+  it('renders an avif named after the adapter beside each material', async () => {
     const root = await makeTempDir('fidelity-');
     const submodulesRoot = path.join(root, 'submodules');
     const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
@@ -159,10 +164,10 @@ describe('createReferences', () => {
       concurrency: 2,
     });
 
-    const outputPngPath = path.join(materialDir, 'fake.png');
+    const outputImagePath = path.join(materialDir, 'fake.avif');
     const outputTempPngPath = path.join(materialDir, 'fake-temp.png');
     const outputJsonPath = path.join(materialDir, 'fake.json');
-    await access(outputPngPath);
+    await access(outputImagePath);
     await access(outputJsonPath);
     await expect(access(outputTempPngPath)).rejects.toThrow('ENOENT');
     await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
@@ -187,7 +192,7 @@ describe('createReferences', () => {
     expect(result.stopped).toBe(false);
   });
 
-  it('keeps the existing png when the rendered image RMS delta is at or below threshold', async () => {
+  it('keeps the existing avif when the rendered image RMS delta is at or below threshold', async () => {
     const root = await makeTempDir('fidelity-');
     const submodulesRoot = path.join(root, 'submodules');
     const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
@@ -199,7 +204,9 @@ describe('createReferences', () => {
     await writeFile(materialMtlxPath(materialDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.png'), NON_BLACK_PIXEL_PNG_BUFFER);
+    const existingAvif = await encodeAvif(NON_BLACK_PIXEL_PNG_BUFFER);
+    await writeFile(path.join(materialDir, 'fake.avif'), existingAvif);
+    await writeFile(path.join(materialDir, 'fake.png'), 'legacy png', 'utf8');
     await writeFile(path.join(materialDir, 'fake.webp'), 'legacy webp', 'utf8');
 
     const result = await createReferences({
@@ -209,15 +216,16 @@ describe('createReferences', () => {
       concurrency: 1,
     });
 
-    const finalPng = await readFile(path.join(materialDir, 'fake.png'));
-    expect(finalPng.equals(NON_BLACK_PIXEL_PNG_BUFFER)).toBe(true);
+    const finalAvif = await readFile(path.join(materialDir, 'fake.avif'));
+    expect(finalAvif.equals(existingAvif)).toBe(true);
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'fake.png'))).rejects.toThrow('ENOENT');
     await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(1);
     expect(result.failures).toHaveLength(0);
   });
 
-  it('replaces the existing png when rendered RMS delta is above threshold', async () => {
+  it('replaces the existing avif when rendered RMS delta is above threshold', async () => {
     const root = await makeTempDir('fidelity-');
     const submodulesRoot = path.join(root, 'submodules');
     const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
@@ -229,7 +237,7 @@ describe('createReferences', () => {
     await writeFile(materialMtlxPath(materialDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.png'), BLACK_PIXEL_PNG_BUFFER);
+    await writeFile(path.join(materialDir, 'fake.avif'), await encodeAvif(BLACK_PIXEL_PNG_BUFFER));
 
     const result = await createReferences({
       submodulesRoot,
@@ -238,14 +246,14 @@ describe('createReferences', () => {
       concurrency: 1,
     });
 
-    const finalPng = await readFile(path.join(materialDir, 'fake.png'));
-    expect(finalPng.equals(NON_BLACK_PIXEL_PNG_BUFFER)).toBe(true);
+    const finalAvif = await readFile(path.join(materialDir, 'fake.avif'));
+    expect(finalAvif.equals(await encodeAvif(NON_BLACK_PIXEL_PNG_BUFFER))).toBe(true);
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(1);
     expect(result.failures).toHaveLength(0);
   });
 
-  it('skips renderer/sample pairs that already have a png when skipExisting is enabled', async () => {
+  it('skips renderer/sample pairs that already have an avif when skipExisting is enabled', async () => {
     const root = await makeTempDir('fidelity-');
     const submodulesRoot = path.join(root, 'submodules');
     const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
@@ -263,9 +271,9 @@ describe('createReferences', () => {
     await writeFile(materialMtlxPath(missingDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(existingDir, 'fake.png'), BLACK_PIXEL_PNG_BUFFER);
-    await writeFile(path.join(existingDir, 'alt.png'), BLACK_PIXEL_PNG_BUFFER);
-    await writeFile(path.join(missingDir, 'alt.png'), BLACK_PIXEL_PNG_BUFFER);
+    await writeFile(path.join(existingDir, 'fake.avif'), BLACK_PIXEL_PNG_BUFFER);
+    await writeFile(path.join(existingDir, 'alt.avif'), BLACK_PIXEL_PNG_BUFFER);
+    await writeFile(path.join(missingDir, 'alt.avif'), BLACK_PIXEL_PNG_BUFFER);
 
     const result = await createReferences({
       submodulesRoot,
@@ -283,8 +291,8 @@ describe('createReferences', () => {
     expect(renderer.generateImage).toHaveBeenCalledWith(
       expect.objectContaining({ mtlxPath: materialMtlxPath(missingDir) }),
     );
-    expect((await readFile(path.join(existingDir, 'fake.png'))).equals(BLACK_PIXEL_PNG_BUFFER)).toBe(true);
-    await expect(access(path.join(missingDir, 'fake.png'))).resolves.toBeUndefined();
+    expect((await readFile(path.join(existingDir, 'fake.avif'))).equals(BLACK_PIXEL_PNG_BUFFER)).toBe(true);
+    await expect(access(path.join(missingDir, 'fake.avif'))).resolves.toBeUndefined();
   });
 
   it('requires the expected viewer hdr and mesh filenames', async () => {
@@ -374,8 +382,8 @@ export function createAdapter() {
     expect(result.total).toBe(1);
     expect(result.attempted).toBe(1);
     expect(result.rendered).toBe(1);
-    await expect(access(path.join(includedDir, 'fake.png'))).resolves.toBeUndefined();
-    await expect(access(path.join(skippedDir, 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('discovers showcase materials recursively', async () => {
@@ -404,8 +412,8 @@ export function createAdapter() {
 
     expect(result.total).toBe(2);
     expect(result.rendered).toBe(2);
-    await expect(access(path.join(showcaseDir, 'fake.png'))).resolves.toBeUndefined();
-    await expect(access(path.join(surfacesDir, 'fake.png'))).resolves.toBeUndefined();
+    await expect(access(path.join(showcaseDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(surfacesDir, 'fake.avif'))).resolves.toBeUndefined();
   });
 
   it('supports regex material selectors against material directory names', async () => {
@@ -448,8 +456,8 @@ export function createAdapter() {
     expect(result.total).toBe(1);
     expect(result.attempted).toBe(1);
     expect(result.rendered).toBe(1);
-    await expect(access(path.join(includedDir, 'fake.png'))).resolves.toBeUndefined();
-    await expect(access(path.join(skippedDir, 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('does not match material selectors against parent directories', async () => {
@@ -479,8 +487,8 @@ export function createAdapter() {
       }),
     ).rejects.toThrow('No .mtlx files matched --materials "gltf_pbr".');
 
-    await expect(access(path.join(includedDir, 'fake.png'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(skippedDir, 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('emits progress events with adapter names for each render task', async () => {
@@ -577,8 +585,8 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    await expect(access(path.join(materialDir, 'fake.png'))).resolves.toBeUndefined();
-    await expect(access(path.join(materialDir, 'alt.png'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'alt.avif'))).resolves.toBeUndefined();
     expect(result.rendererNames.toSorted()).toEqual(['alt', 'fake']);
     expect(result.total).toBe(2);
     expect(result.rendered).toBe(2);
@@ -677,7 +685,7 @@ export function createAdapter() {
       'utf8',
     );
     await writeFile(path.join(materialDir, 'fake.webp'), 'stale webp from previous run', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.png'), 'stale png from previous run', 'utf8');
+    await writeFile(path.join(materialDir, 'fake.avif'), 'stale avif from previous run', 'utf8');
 
     const result = await createReferences({
       submodulesRoot,
@@ -686,9 +694,9 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    const outputPngPath = path.join(materialDir, 'fake.png');
+    const outputImagePath = path.join(materialDir, 'fake.avif');
     const outputJsonPath = path.join(materialDir, 'fake.json');
-    await expect(access(outputPngPath)).rejects.toThrow('ENOENT');
+    await expect(access(outputImagePath)).rejects.toThrow('ENOENT');
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
     await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
     await access(outputJsonPath);
@@ -711,7 +719,7 @@ export function createAdapter() {
     expect(result.failures[0]?.error.message).toContain('Render output is empty');
   });
 
-  it('deletes an existing png when a renderer throws a failure', async () => {
+  it('deletes an existing avif when a renderer throws a failure', async () => {
     const root = await makeTempDir('fidelity-');
     const submodulesRoot = path.join(root, 'submodules');
     const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
@@ -728,7 +736,7 @@ export function createAdapter() {
     await writeFile(materialMtlxPath(materialDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.png'), 'stale png from previous run', 'utf8');
+    await writeFile(path.join(materialDir, 'fake.avif'), 'stale avif from previous run', 'utf8');
 
     const result = await createReferences({
       submodulesRoot,
@@ -737,7 +745,7 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    await expect(access(path.join(materialDir, 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'fake.avif'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(0);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.error.message).toContain('Renderer failed');
@@ -944,8 +952,8 @@ export function createAdapter() {
     expect(result.rendered).toBe(1);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.materialPath).toBe(materialMtlxPath(invalidMaterialDir));
-    await expect(access(path.join(validMaterialDir, 'fake.png'))).resolves.toBeUndefined();
-    await expect(access(path.join(invalidMaterialDir, 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(validMaterialDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(invalidMaterialDir, 'fake.avif'))).rejects.toThrow('ENOENT');
     await expect(access(path.join(invalidMaterialDir, 'fake.json'))).resolves.toBeUndefined();
     await expect(access(path.join(validMaterialDir, 'fake.json'))).resolves.toBeUndefined();
   });

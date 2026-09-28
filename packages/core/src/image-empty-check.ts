@@ -10,14 +10,14 @@ interface RawRgbaImage {
 }
 
 export async function readImageAsRawRgba(
-  imagePath: string,
+  image: string | Buffer,
   resizeTo?: { width: number; height: number },
 ): Promise<RawRgbaImage> {
-  let image = sharp(imagePath).ensureAlpha();
+  let pipeline = sharp(image).ensureAlpha();
   if (resizeTo) {
-    image = image.resize(resizeTo.width, resizeTo.height, { fit: 'fill' });
+    pipeline = pipeline.resize(resizeTo.width, resizeTo.height, { fit: 'fill' });
   }
-  const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await pipeline.raw().toBuffer({ resolveWithObject: true });
   return {
     data,
     width: info.width,
@@ -64,11 +64,11 @@ export function calculateNormalizedRgbRms(source: Buffer, reference: Buffer): nu
 }
 
 export async function calculateImageNormalizedRgbRms(
-  sourceImagePath: string,
+  source: string | Buffer,
   referenceImagePath: string,
   options?: { treatDimensionMismatchAsMaxDifference?: boolean },
 ): Promise<number> {
-  const sourceImage = await readImageAsRawRgba(sourceImagePath);
+  const sourceImage = await readImageAsRawRgba(source);
   const referenceImage = await readImageAsRawRgba(referenceImagePath);
   if (sourceImage.width !== referenceImage.width || sourceImage.height !== referenceImage.height) {
     if (options?.treatDimensionMismatchAsMaxDifference) {
