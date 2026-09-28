@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { readFile } from 'node:fs/promises';
-import { rendererPngPath } from '@material-fidelity/samples';
-import { pathExists, resolveMaterialDirectory, resolveSampleRoots } from '@material-fidelity/samples-io';
+import { rendererPngPath } from '@mtlx-fidelity/samples';
+import { pathExists, resolveMaterialDirectory, resolveSampleRoots } from '@mtlx-fidelity/samples-io';
 import { contentHashFromBytes, referenceAssetGetResponse } from '#/lib/reference-asset-response.server';
 
 const IMAGE_CONTENT_HASH_QUERY_PARAM = 'v';

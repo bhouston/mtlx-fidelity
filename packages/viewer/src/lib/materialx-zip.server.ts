@@ -4,7 +4,7 @@ import {
   resolveMaterialDirectory,
   resolveMaterialFilePath,
   resolveSampleRoots,
-} from '@material-fidelity/samples-io';
+} from '@mtlx-fidelity/samples-io';
 
 export interface MaterialXZipPayload {
   zip: Uint8Array;

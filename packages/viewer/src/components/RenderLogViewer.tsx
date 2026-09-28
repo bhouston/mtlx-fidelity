@@ -1,4 +1,4 @@
-import type { RenderLogEntry, RenderLogLevel } from '@material-fidelity/samples';
+import type { RenderLogEntry, RenderLogLevel } from '@mtlx-fidelity/samples';
 
 interface RenderLogViewerProps {
   logs?: RenderLogEntry[];

@@ -2,23 +2,23 @@ import path from 'node:path';
 import { availableParallelism } from 'node:os';
 import { createElement, useEffect, useMemo, useRef, useState } from 'react';
 import { render, useApp, useInput } from 'ink';
-import { createReferences } from '@material-fidelity/core';
-import type { CreateReferencesProgressEvent, CreateReferencesResult, FidelityRenderer } from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+import { createReferences } from '@mtlx-fidelity/core';
+import type { CreateReferencesProgressEvent, CreateReferencesResult, FidelityRenderer } from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 import {
   createEeveeNodesRenderer as createBlenderEeveeNodesRenderer,
   createNodesRenderer as createBlenderNodesRenderer,
   createRenderer as createBlenderRenderer,
-} from '@material-fidelity/renderer-blender';
+} from '@mtlx-fidelity/renderer-blender';
 import {
   createGlslRenderer as createMaterialXGlslRenderer,
   createMetalRenderer as createMaterialXMetalRenderer,
   createOslRenderer as createMaterialXOslRenderer,
-} from '@material-fidelity/renderer-materialxview';
+} from '@mtlx-fidelity/renderer-materialxview';
 import {
   createCurrentRenderer as createThreeJsCurrentRenderer,
   createRenderer as createThreeJsNewRenderer,
-} from '@material-fidelity/renderer-threejs';
+} from '@mtlx-fidelity/renderer-threejs';
 import { humanizeTime } from 'humanize-units';
 import { defineCommand } from 'yargs-file-commands';
 import { resolveRendererNames } from '../renderer-selectors.js';

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { materialMatchesSelector } from '@material-fidelity/samples';
+import { materialMatchesSelector } from '@mtlx-fidelity/samples';
 
 describe('materialMatchesSelector', () => {
   const materialPath = path.join('/tmp', 'materials', 'surfaces', 'gltf_pbr', 'included', 'included.mtlx');

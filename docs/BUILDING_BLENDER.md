@@ -33,7 +33,7 @@ export SDKROOT="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26
 
 ## One-Time Configure
 
-Run from the material-fidelity repository root.
+Run from the mtlx-fidelity repository root.
 
 Blender’s CMake initializes **`CMAKE_BUILD_TYPE`** to **`Release`** when unset, so the default configure is an **optimized** build. You can still pass **`-DCMAKE_BUILD_TYPE=Release`** or **`-DCMAKE_BUILD_TYPE=Debug`** explicitly.
 

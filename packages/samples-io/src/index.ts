@@ -1,4 +1,4 @@
-export * from '@material-fidelity/samples';
+export * from '@mtlx-fidelity/samples';
 export * from './discovery.js';
 export * from './fs-utils.js';
 export * from './material-package.js';

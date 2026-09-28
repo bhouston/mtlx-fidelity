@@ -3,7 +3,7 @@ import { access, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promise
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { PNG } from 'pngjs';
-import { parseRenderReport } from '@material-fidelity/samples';
+import { parseRenderReport } from '@mtlx-fidelity/samples';
 import { createReferences } from './references.js';
 import type { FidelityRenderer } from './types.js';
 

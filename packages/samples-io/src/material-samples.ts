@@ -10,7 +10,7 @@ import {
   type MtlzMetadata,
   type RenderReport,
   type RendererDescriptor,
-} from '@material-fidelity/samples';
+} from '@mtlx-fidelity/samples';
 import { findMtlxMaterialFiles } from './discovery.js';
 import { pathExists } from './fs-utils.js';
 import { createMaterialPackage, type MaterialPackageResult } from './material-package.js';

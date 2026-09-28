@@ -1,6 +1,10 @@
-# Material Fidelity Suite
+# MTLX Fidelity
 
-The Material Fidelity Suite (avalable here online: https://material-fidelity.ben3d.ca) is a website and toolset for generating and comparing renderer output for known MaterialX sample scenes. It is the test suite behind the work described in [Pixel-Perfect MaterialX in Blender and Three.js](https://ben3d.ca/blog/pixel-perfect-materialx-in-blender-and-threejs).
+[![Discord](https://img.shields.io/badge/Discord-join%20the%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/wzQWaBBxup)
+
+MTLX Fidelity is part of the [mtlx suite of tools](https://mtlx.ai) ([GitHub](https://github.com/bhouston/mtlx)).
+
+MTLX Fidelity (available online at https://material-fidelity.ben3d.ca) is a website and toolset for generating and comparing renderer output for known MaterialX sample scenes. It is the test suite behind the work described in [Pixel-Perfect MaterialX in Blender and Three.js](https://ben3d.ca/blog/pixel-perfect-materialx-in-blender-and-threejs).
 
 ![MaterialX showcase — materialxview vs Three.js vs Blender](docs/images/materialx-showcase.webp)
 
@@ -102,14 +106,14 @@ This command writes `metrics.json` in each directory containing a `.mtlx` materi
 
 Currently supported renderers:
 
-- `materialx-glsl` (`@material-fidelity/renderer-materialxview`, MaterialXView OpenGL/GLSL)
-- `materialx-metal` (`@material-fidelity/renderer-materialxview`, MaterialXView Metal/MSL)
-- `materialx-osl` (`@material-fidelity/renderer-materialxview`, MaterialX OSL)
-- `blender-new` (`@material-fidelity/renderer-blender`, Blender bundled MaterialX rendered through Cycles)
-- `blender-nodes` (`@material-fidelity/renderer-blender`, patched Blender custom MaterialX nodes rendered through Cycles)
-- `blender-eevee-nodes` (`@material-fidelity/renderer-blender`, patched Blender custom MaterialX nodes rendered through Eevee)
-- `threejs-current` (`@material-fidelity/renderer-threejs`, official npm Three.js MaterialX support)
-- `threejs-new` (`@material-fidelity/renderer-threejs`, custom MaterialX support proposal)
+- `materialx-glsl` (`@mtlx-fidelity/renderer-materialxview`, MaterialXView OpenGL/GLSL)
+- `materialx-metal` (`@mtlx-fidelity/renderer-materialxview`, MaterialXView Metal/MSL)
+- `materialx-osl` (`@mtlx-fidelity/renderer-materialxview`, MaterialX OSL)
+- `blender-new` (`@mtlx-fidelity/renderer-blender`, Blender bundled MaterialX rendered through Cycles)
+- `blender-nodes` (`@mtlx-fidelity/renderer-blender`, patched Blender custom MaterialX nodes rendered through Cycles)
+- `blender-eevee-nodes` (`@mtlx-fidelity/renderer-blender`, patched Blender custom MaterialX nodes rendered through Eevee)
+- `threejs-current` (`@mtlx-fidelity/renderer-threejs`, official npm Three.js MaterialX support)
+- `threejs-new` (`@mtlx-fidelity/renderer-threejs`, custom MaterialX support proposal)
 
 Optional flags:
 

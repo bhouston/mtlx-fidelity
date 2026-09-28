@@ -49,9 +49,9 @@ export default function Header({
             {import.meta.env.VITE_SITE_NAME}
           </Link>
           <a
-            aria-label="MaterialX Fidelity Testing repository"
+            aria-label="MTLX Fidelity repository"
             className="ml-auto inline-flex items-center text-muted-foreground transition-colors hover:text-foreground md:hidden"
-            href="https://github.com/bhouston/material-fidelity"
+            href="https://github.com/bhouston/mtlx-fidelity"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -77,9 +77,9 @@ export default function Header({
             {shownMaterialCount}/{totalMaterialCount}
           </span>
           <a
-            aria-label="MaterialX Fidelity Testing repository"
+            aria-label="MTLX Fidelity repository"
             className="ml-1 hidden items-center text-muted-foreground transition-colors hover:text-foreground md:inline-flex"
-            href="https://github.com/bhouston/material-fidelity"
+            href="https://github.com/bhouston/mtlx-fidelity"
             rel="noopener noreferrer"
             target="_blank"
           >

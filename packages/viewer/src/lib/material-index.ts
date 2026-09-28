@@ -6,8 +6,8 @@ import {
   sortMaterialTypes,
   type RendererCategory,
   type RendererDescriptor,
-} from '@material-fidelity/samples';
-import { MaterialSamples, pathExists, resolveSampleRoots } from '@material-fidelity/samples-io';
+} from '@mtlx-fidelity/samples';
+import { MaterialSamples, pathExists, resolveSampleRoots } from '@mtlx-fidelity/samples-io';
 import { contentHashFromBytes } from './reference-asset-response.server.ts';
 
 const MATERIAL_SOURCE_BASE_URL = 'https://github.com/bhouston/material-samples/tree/main/materials';

@@ -1,4 +1,4 @@
-import type { RenderLogEntry } from '@material-fidelity/samples';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 export interface GenerateImageOptions {
   mtlxPath: string;

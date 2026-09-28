@@ -1,5 +1,5 @@
 {
-  "name": "@material-fidelity/viewer",
+  "name": "@mtlx-fidelity/viewer",
   "private": true,
   "type": "module",
   "imports": {
@@ -14,11 +14,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@material-fidelity/renderer-blender": "workspace:*",
-    "@material-fidelity/renderer-materialxview": "workspace:*",
-    "@material-fidelity/renderer-threejs": "workspace:*",
-    "@material-fidelity/samples": "workspace:*",
-    "@material-fidelity/samples-io": "workspace:*",
+    "@mtlx-fidelity/renderer-blender": "workspace:*",
+    "@mtlx-fidelity/renderer-materialxview": "workspace:*",
+    "@mtlx-fidelity/renderer-threejs": "workspace:*",
+    "@mtlx-fidelity/samples": "workspace:*",
+    "@mtlx-fidelity/samples-io": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.15",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/devtools-vite": "^0.6.0",

@@ -232,7 +232,7 @@ describe('blender renderer', () => {
       {
         code: 0,
         stdout: [
-          '00:00.302  blend            | Read blend: "/tmp/material-fidelity-blender-abc/template.blend"',
+          '00:00.302  blend            | Read blend: "/tmp/mtlx-fidelity-blender-abc/template.blend"',
           "00:04.658  render           | Saved: '/tmp/example/blender-new-temp.png'",
           'render started',
           '{"event":"blender-new-render-start","warnings":["MaterialX noise node fractal2d is using Blender fallback"]}',

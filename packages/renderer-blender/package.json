@@ -1,5 +1,5 @@
 {
-  "name": "@material-fidelity/renderer-blender",
+  "name": "@mtlx-fidelity/renderer-blender",
   "version": "0.1.0",
   "source": "./src/index.ts",
   "files": [
@@ -15,7 +15,7 @@
     "dev": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@material-fidelity/core": "workspace:*",
-    "@material-fidelity/samples": "workspace:*"
+    "@mtlx-fidelity/core": "workspace:*",
+    "@mtlx-fidelity/samples": "workspace:*"
   }
 }

@@ -14,8 +14,8 @@ import {
   type RendererContext,
   type RendererPrerequisiteCheckResult,
   type RendererStartOptions,
-} from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 const BLENDER_EXECUTABLE_ENV = 'BLENDER_EXECUTABLE';
 const BLENDER_NODES_EXECUTABLE_ENV = 'BLENDER_NODES_EXECUTABLE';
@@ -605,7 +605,7 @@ class BlenderRenderer implements FidelityRenderer {
     }
 
     const scriptPath = this.scriptPath;
-    const templateDirectory = await mkdtemp(join(tmpdir(), 'material-fidelity-blender-'));
+    const templateDirectory = await mkdtemp(join(tmpdir(), 'mtlx-fidelity-blender-'));
     const templatePath = join(templateDirectory, 'template.blend');
     const args = [
       '--background',

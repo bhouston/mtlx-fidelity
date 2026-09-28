@@ -13,8 +13,8 @@ import {
   type RendererContext,
   type RendererPrerequisiteCheckResult,
   type RendererStartOptions,
-} from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 interface RuntimeState {
   baseUrl: string;

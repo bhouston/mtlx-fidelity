@@ -35,8 +35,8 @@ ENV BASE_URL=${BASE_URL} \
 
 RUN pnpm build
 RUN pnpm cli metrics
-RUN pnpm --filter @material-fidelity/viewer cache:index
+RUN pnpm --filter @mtlx-fidelity/viewer cache:index
 
 EXPOSE 8080
 
-CMD ["pnpm", "--filter", "@material-fidelity/viewer", "start"]
+CMD ["pnpm", "--filter", "@mtlx-fidelity/viewer", "start"]

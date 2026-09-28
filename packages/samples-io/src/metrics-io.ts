@@ -5,7 +5,7 @@ import {
   METRICS_FILE_NAME,
   type ImageSimilarityMetrics,
   type MaterialMetricsFile,
-} from '@material-fidelity/samples';
+} from '@mtlx-fidelity/samples';
 import { pathExists } from './fs-utils.js';
 
 export function parseRendererMetrics(value: unknown): ImageSimilarityMetrics | null {
