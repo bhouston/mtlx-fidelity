@@ -202,7 +202,7 @@ class ThreeJsRenderer implements FidelityRenderer {
     }
 
     try {
-      const samplesRoot = join(this.submodulesRoot, 'material-samples');
+      const samplesRoot = join(this.submodulesRoot, 'mtlx-sample-library');
       const viewerRoot = join(samplesRoot, 'viewer');
       const requiredFiles = [join(viewerRoot, VIEWER_HDR_FILENAME), join(viewerRoot, VIEWER_MODEL_FILENAME)];
       if (this.materialXLoaderVariant === 'custom') {

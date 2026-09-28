@@ -99,7 +99,7 @@ function InkCalculateMetricsApp({ args, onComplete, onError }: InkCalculateMetri
 
   useEffect(() => {
     let active = true;
-    const materialsRoot = path.join(args.submodulesRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(args.submodulesRoot, 'mtlx-sample-library', 'materials');
 
     const applyProgress = (event: CalculateMetricsProgressEvent) => {
       if (!active) {

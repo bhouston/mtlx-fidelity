@@ -36,7 +36,7 @@ export const BUILT_IN_RENDERER_DESCRIPTORS: RendererDescriptor[] = [
     description: 'Blender MaterialX Importer rendered through Cycles',
     packageName: '@mtlx-fidelity/renderer-blender',
     sourceName: 'Blender MaterialX Importer',
-    sourceUrl: 'https://github.com/bhouston/blender-materialx-importer',
+    sourceUrl: 'https://github.com/bhouston/mtlx-blender-importer',
   },
   {
     name: 'blender-nodes',
@@ -45,7 +45,7 @@ export const BUILT_IN_RENDERER_DESCRIPTORS: RendererDescriptor[] = [
     description: 'Blender MaterialX Importer through Cycles with Blender custom MaterialX nodes PR #158054',
     packageName: '@mtlx-fidelity/renderer-blender',
     sourceName: 'Blender MaterialX Importer',
-    sourceUrl: 'https://github.com/bhouston/blender-materialx-importer',
+    sourceUrl: 'https://github.com/bhouston/mtlx-blender-importer',
   },
   {
     name: 'blender-eevee-nodes',
@@ -54,7 +54,7 @@ export const BUILT_IN_RENDERER_DESCRIPTORS: RendererDescriptor[] = [
     description: 'Blender MaterialX Importer through Eevee with Blender custom MaterialX nodes PR #158054',
     packageName: '@mtlx-fidelity/renderer-blender',
     sourceName: 'Blender MaterialX Importer',
-    sourceUrl: 'https://github.com/bhouston/blender-materialx-importer',
+    sourceUrl: 'https://github.com/bhouston/mtlx-blender-importer',
   },
   {
     name: 'threejs-current',

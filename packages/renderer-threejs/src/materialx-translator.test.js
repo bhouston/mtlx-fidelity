@@ -63,7 +63,7 @@ function createDomLikeDocument(text) {
 
 function readNodeSample(name) {
   return readFileSync(
-    new URL(`../../../submodules/material-samples/materials/nodes/${name}/${name}.mtlx`, import.meta.url),
+    new URL(`../../../submodules/mtlx-sample-library/materials/nodes/${name}/${name}.mtlx`, import.meta.url),
     'utf8',
   );
 }
@@ -327,7 +327,7 @@ describe('vendored three.js MaterialX translator contracts', () => {
     const loader = new MaterialXLoader();
     const result = loader.parseBuffer(
       readMaterialSample(
-        'submodules/material-samples/materials/surfaces/standard_surface/showcase_graph_pbr_helpers/showcase_graph_pbr_helpers.mtlx',
+        'submodules/mtlx-sample-library/materials/surfaces/standard_surface/showcase_graph_pbr_helpers/showcase_graph_pbr_helpers.mtlx',
       ),
       'showcase_graph_pbr_helpers.mtlx',
     );

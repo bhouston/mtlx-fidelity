@@ -27,4 +27,4 @@ Renderers, samples, and the patched three.js live in `submodules/`. When a chang
 
 Use the Node version in `.nvmrc` and the pinned pnpm version in `package.json`, then run `git submodule update --init` for the submodules you need and `pnpm install --frozen-lockfile`.
 
-CI checks out `material-samples`, `material-viewer`, and `three.js`, then checks builds, types, lint, and tests. Dependency audit findings appear as warnings so existing advisories remain visible without preventing unrelated fixes.
+CI checks out `mtlx-sample-library`, `material-viewer`, and `three.js`, then checks builds, types, lint, and tests. Dependency audit findings appear as warnings so existing advisories remain visible without preventing unrelated fixes.

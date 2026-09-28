@@ -1,12 +1,12 @@
 [submodule "third_party/material-samples"]
-	path = submodules/material-samples
-	url = git@github.com:bhouston/material-samples.git
+	path = submodules/mtlx-sample-library
+	url = git@github.com:bhouston/mtlx-sample-library.git
 [submodule "third_party/material-viewer"]
 	path = submodules/material-viewer
 	url = git@github.com:bhouston/material-viewer.git
 [submodule "third_party/blender-materialx-importer"]
-	path = submodules/blender-materialx-importer
-	url = git@github.com:bhouston/blender-materialx-importer.git
+	path = submodules/mtlx-blender-importer
+	url = git@github.com:bhouston/mtlx-blender-importer.git
 [submodule "third_party/three.js"]
 	path = submodules/three.js
 	url = git@github.com:bhouston/three.js.git

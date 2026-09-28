@@ -65,7 +65,7 @@ afterEach(async () => {
 describe('threejs renderer', () => {
   it('creates a new page for each render and closes it', async () => {
     const submodulesRoot = await makeTempDir('submodules-');
-    const samplesRoot = path.join(submodulesRoot, 'material-samples');
+    const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
     const viewerRoot = path.join(samplesRoot, 'viewer');
     await createFile(path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'));
     await createFile(path.join(viewerRoot, 'ShaderBall.glb'));
@@ -156,7 +156,7 @@ describe('threejs renderer', () => {
 
   it('returns MaterialX warning and error logs from the capture page', async () => {
     const submodulesRoot = await makeTempDir('submodules-');
-    const samplesRoot = path.join(submodulesRoot, 'material-samples');
+    const samplesRoot = path.join(submodulesRoot, 'mtlx-sample-library');
     const viewerRoot = path.join(samplesRoot, 'viewer');
     await createFile(path.join(viewerRoot, 'san_giuseppe_bridge_2k.hdr'));
     await createFile(path.join(viewerRoot, 'ShaderBall.glb'));

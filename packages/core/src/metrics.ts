@@ -155,7 +155,7 @@ export async function calculateMetrics(options: CalculateMetricsOptions): Promis
   const materialsRoot = getMaterialsRoot(samplesRoot);
 
   if (!(await fileExists(samplesRoot))) {
-    throw new Error(`Missing required material-samples directory at ${samplesRoot}.`);
+    throw new Error(`Missing required mtlx-sample-library directory at ${samplesRoot}.`);
   }
   if (!(await fileExists(materialsRoot))) {
     throw new Error(`Missing required materials directory at ${materialsRoot}.`);

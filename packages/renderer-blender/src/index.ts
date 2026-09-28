@@ -22,8 +22,8 @@ const BLENDER_NODES_EXECUTABLE_ENV = 'BLENDER_NODES_EXECUTABLE';
 const MACOS_APPLICATIONS_DIRECTORY = '/Applications';
 const BLENDER_PROCESS_TERMINATION_GRACE_MS = 1000;
 const BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES = [
-  ['blender-materialx-importer', 'materialx_importer', '__init__.py'],
-  ['blender-materialx-importer', 'materialx_importer', 'importer.py'],
+  ['mtlx-blender-importer', 'materialx_importer', '__init__.py'],
+  ['mtlx-blender-importer', 'materialx_importer', 'importer.py'],
 ];
 const MX_NOISE_NODE_TYPES = [
   'ShaderNodeMxNoise2D',

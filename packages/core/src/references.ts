@@ -134,7 +134,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
   try {
     await access(samplesRoot);
   } catch {
-    throw new Error(`Missing required material-samples directory at ${samplesRoot}.`);
+    throw new Error(`Missing required mtlx-sample-library directory at ${samplesRoot}.`);
   }
 
   try {

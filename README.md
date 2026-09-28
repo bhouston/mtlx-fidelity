@@ -15,7 +15,7 @@ Every material is rendered through MaterialX reference backends and compared sid
 ## Related Work
 
 - **[Three.js PR #33485](https://github.com/mrdoob/three.js/pull/33485)** — MaterialX upgrade: near-perfect fidelity across all 400+ samples, new `open_pbr_surface` / `gltf_pbr` support, archive loading, corrected noise implementations.
-- **[blender-materialx-importer](submodules/blender-materialx-importer)** — Python importer that compiles MaterialX graphs into Blender node graphs, supporting both Cycles and Eevee.
+- **[mtlx-blender-importer](submodules/mtlx-blender-importer)** — Python importer that compiles MaterialX graphs into Blender node graphs, supporting both Cycles and Eevee.
 - **[Blender PR #158054](https://projects.blender.org/blender/blender/pulls/158054)** — Custom MaterialX noise nodes for Blender (Cycles OSL/GLSL and Eevee): `MxNoise`, `MxFractal`, `MxCellNoise`, `MxWorleyNoise`, `MxUnifiedNoise` in both 2D and 3D variants.
 
 ## Repository Layout
@@ -27,7 +27,7 @@ Every material is rendered through MaterialX reference backends and compared sid
 - `submodules/MaterialX` - custom MaterialX branch used by the MaterialXView GLSL/Metal and OSL reference renderers
 - `submodules/OpenShadingLanguage` - Open Shading Language sources used to provide **`oslc`** and **`testrender`** for the **`materialx-osl`** renderer (build/install instructions: `docs/building-openshadinglanguage.md`)
 - `submodules/blender` - patched Blender branch with custom MaterialX nodes used by `blender-nodes` and `blender-eevee-nodes`
-- `submodules/blender-materialx-importer` - standalone Blender MaterialX importer used by the Blender fidelity renderers
+- `submodules/mtlx-blender-importer` - standalone Blender MaterialX importer used by the Blender fidelity renderers
 - `submodules/three.js` - custom Three.js branch used only by the `threejs-new` renderer
 
 ## Building Blender and MaterialX
@@ -128,25 +128,25 @@ The `metrics` command supports the same `--renderers`, `--materials`, and `--con
 
 Samples are organized by purpose:
 
-- `submodules/material-samples/materials/nodes` - canonical per-node tests
-- `submodules/material-samples/materials/surfaces/<surface_type>` - focused surface-attribute/debug samples grouped by shader family
-- `submodules/material-samples/materials/showcase/<surface_type>` - complex, transferable showcase materials grouped by shader family
+- `submodules/mtlx-sample-library/materials/nodes` - canonical per-node tests
+- `submodules/mtlx-sample-library/materials/surfaces/<surface_type>` - focused surface-attribute/debug samples grouped by shader family
+- `submodules/mtlx-sample-library/materials/showcase/<surface_type>` - complex, transferable showcase materials grouped by shader family
 
 ## Node Isolation Suite
 
 The node isolation materials currently live under:
 
-- `submodules/material-samples/materials/surfaces/gltf_pbr/node_isolation`
+- `submodules/mtlx-sample-library/materials/surfaces/gltf_pbr/node_isolation`
 
 Each node gets its own directory and `<node-name>.mtlx`, with phase planning documented in:
 
-- `submodules/material-samples/materials/surfaces/gltf_pbr/node_isolation/PHASES.md`
+- `submodules/mtlx-sample-library/materials/surfaces/gltf_pbr/node_isolation/PHASES.md`
 
 ### Validate Node Isolation Materials
 
 ```bash
 # single material (run from repo root)
-pnpm --filter @material-viewer/mtlx start check "$PWD/submodules/material-samples/materials/surfaces/gltf_pbr/node_isolation/add/add.mtlx"
+pnpm --filter @material-viewer/mtlx start check "$PWD/submodules/mtlx-sample-library/materials/surfaces/gltf_pbr/node_isolation/add/add.mtlx"
 ```
 
 ```bash
@@ -156,7 +156,7 @@ from pathlib import Path
 import subprocess
 
 root = Path.cwd()
-files = sorted((root / "submodules/material-samples/materials/surfaces/gltf_pbr/node_isolation").glob("*/*.mtlx"))
+files = sorted((root / "submodules/mtlx-sample-library/materials/surfaces/gltf_pbr/node_isolation").glob("*/*.mtlx"))
 for file in files:
     subprocess.run(
         ["pnpm", "--filter", "@material-viewer/mtlx", "start", "check", str(file)],
@@ -207,7 +207,7 @@ To keep reference renders visually comparable between `materialx-glsl`, `materia
 These values are intentionally aligned with `MaterialXView` defaults and its scene normalization behavior in `source/MaterialXView/Viewer.cpp`.
 `threejs-new` resolves Three.js from the custom `submodules/three.js` submodule, including both the core WebGPU/TSL build and `examples/jsm/loaders/MaterialXLoader.js`; `threejs-current` continues to use the npm-installed `three` package.
 The **`materialx-glsl`** and **`materialx-metal`** reference renderers prefer MaterialXView binaries built from **`submodules/MaterialX`** (under `build/materialx-*`). **`materialx-osl`** uses the **`materialx-osl`** executable from **`submodules/MaterialX`** and, at run time, the Open Shading Language toolchain (**`oslc`**, **`testrender`**) from an install such as **`build/osl-dist/`** (see [docs/building-openshadinglanguage.md](docs/building-openshadinglanguage.md)).
-The Blender renderers follow the same scene contract through background Python scripts. **`blender-new`** uses the `submodules/blender-materialx-importer` submodule with Blender's bundled MaterialX; **`blender-nodes`** and **`blender-eevee-nodes`** use the same importer but run against the **custom Blender build from the `submodules/blender` submodule** (patched MaterialX nodes).
+The Blender renderers follow the same scene contract through background Python scripts. **`blender-new`** uses the `submodules/mtlx-blender-importer` submodule with Blender's bundled MaterialX; **`blender-nodes`** and **`blender-eevee-nodes`** use the same importer but run against the **custom Blender build from the `submodules/blender` submodule** (patched MaterialX nodes).
 
 The importer is intentionally maintained as a separate project. This repository keeps the shader-ball setup, render orchestration, image outputs, metrics, and viewer used to validate its Cycles and Eevee fidelity.
 

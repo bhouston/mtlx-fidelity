@@ -297,7 +297,7 @@ function App() {
               <li>
                 <a
                   className="underline underline-offset-2 hover:no-underline"
-                  href="https://github.com/bhouston/material-samples"
+                  href="https://github.com/bhouston/mtlx-sample-library"
                   target="_blank"
                 >
                   Add more reference samples here.

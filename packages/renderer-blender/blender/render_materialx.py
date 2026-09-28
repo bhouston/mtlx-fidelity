@@ -44,7 +44,7 @@ _IMPORT_TIMINGS_MS["mathutils"] = round((time.perf_counter() - _started_at) * 10
 _started_at = time.perf_counter()
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[2]
-IMPORTER_ROOT = REPO_ROOT / "submodules" / "blender-materialx-importer"
+IMPORTER_ROOT = REPO_ROOT / "submodules" / "mtlx-blender-importer"
 for path in (IMPORTER_ROOT, SCRIPT_DIR):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))

@@ -110,7 +110,7 @@ function InkCreateReferencesApp({ args, onComplete, onError }: InkCreateReferenc
 
   useEffect(() => {
     let active = true;
-    const materialsRoot = path.join(args.submodulesRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(args.submodulesRoot, 'mtlx-sample-library', 'materials');
 
     const applyProgress = (event: CreateReferencesProgressEvent) => {
       if (!active) {
@@ -285,7 +285,7 @@ export const command = defineCommand({
       skipExisting: argv.skipExisting ?? false,
       filter: argv.filter,
     };
-    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(submodulesRoot, 'mtlx-sample-library', 'materials');
     const isInteractive = process.stdout.isTTY && !process.env.CI;
     const result = isInteractive
       ? await runCreateReferencesWithInk(commandArgs)
