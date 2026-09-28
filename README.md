@@ -88,9 +88,9 @@ pnpm cli render
 pnpm cli render --renderers threejs-new --materials open_pbr
 ```
 
-This command writes `<renderer-name>.png` in each directory containing a `.mtlx` material file.
+This command writes `<renderer-name>.avif` in each directory containing a `.mtlx` material file.
 
-Calculate visual similarity metrics against each material's `materialx-glsl.png` reference:
+Calculate visual similarity metrics against each material's `materialx-glsl.avif` reference:
 
 ```bash
 # all renderers, all materials
@@ -102,7 +102,7 @@ pnpm cli metrics
 pnpm cli metrics --renderers threejs-current,threejs-new --materials open_pbr
 ```
 
-This command writes `metrics.json` in each directory containing a `.mtlx` material file and a `materialx-glsl.png` reference. Each file is keyed by renderer name and contains a `psnr` value.
+This command writes `metrics.json` in each directory containing a `.mtlx` material file and a `materialx-glsl.avif` reference. Each file is keyed by renderer name and contains a `psnr` value.
 
 Currently supported renderers:
 
@@ -120,7 +120,7 @@ Optional flags:
 - `--renderers <selector[,selector...]>` optional renderer filter; supports repeated flags, comma-separated values, and substring matches such as `threejs` or `blender`
 - `--materials <selector[,selector...]>` optional material filter; matches against each material directory name only (leaf directory), supports repeated flags, comma-separated values, substring matches, and regex selectors (`re:...` or `/.../flags`)
 - `--concurrency <number>` optional render concurrency; defaults to the recommended available parallelism, with a minimum of `1`
-- `--skip-existing` only render renderer/material pairs whose `<renderer-name>.png` output does not already exist
+- `--skip-existing` only render renderer/material pairs whose `<renderer-name>.avif` output does not already exist
 
 The `metrics` command supports the same `--renderers`, `--materials`, and `--concurrency` filters.
 
@@ -221,7 +221,7 @@ pnpm viewer
 
 The viewer scans MaterialX materials and looks for images for the built-in renderer list (`materialx-glsl`, `materialx-metal`, `materialx-osl`, `blender-new`, `blender-nodes`, `blender-eevee-nodes`, `threejs-current`, `threejs-new`).
 
-The page groups materials by purpose/type (`showcase`, `nodes`, `open_pbr_surface`, `gltf_pbr`, `standard_surface`) and displays each renderer image (`<renderer>.png`) side by side. Missing images render as a placeholder tile.
+The page groups materials by purpose/type (`showcase`, `nodes`, `open_pbr_surface`, `gltf_pbr`, `standard_surface`) and displays each renderer image (`<renderer>.avif`) side by side. Missing images render as a placeholder tile.
 When the URL does not include a `renderers` filter, the viewer defaults to showing `materialx-glsl`, `materialx-metal`, `materialx-osl`, `blender-nodes`, `blender-eevee-nodes`, and `threejs-new`; users can enable the other built-in renderers from the renderer filter UI.
 If a material directory contains `metrics.json`, the viewer displays each renderer's PSNR beneath its image. Material rows render lightweight placeholders until they are near the viewport, then load the image tiles, render reports, and metrics for smoother browsing.
 

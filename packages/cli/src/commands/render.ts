@@ -232,7 +232,7 @@ async function runCreateReferencesWithInk(args: InkCreateReferencesAppProps['arg
 
 export const command = defineCommand({
   command: 'render',
-  describe: 'Render reference PNG images for each MaterialX sample material.',
+  describe: 'Render reference AVIF images for each MaterialX sample material.',
   builder: (yargs) =>
     yargs
       .option('renderers', {
@@ -252,7 +252,7 @@ export const command = defineCommand({
       .option('skip-existing', {
         type: 'boolean',
         default: false,
-        describe: 'Only render outputs whose renderer/sample PNG does not already exist.',
+        describe: 'Only render outputs whose renderer/sample AVIF does not already exist.',
       })
       .option('filter', {
         type: 'string',

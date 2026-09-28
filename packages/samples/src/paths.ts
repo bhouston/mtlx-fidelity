@@ -18,8 +18,8 @@ export function metricsFilePath(materialDirectory: string): string {
   return joinPath(materialDirectory, METRICS_FILE_NAME);
 }
 
-export function rendererPngPath(materialDirectory: string, rendererName: string): string {
-  return joinPath(materialDirectory, `${rendererName}.png`);
+export function rendererImagePath(materialDirectory: string, rendererName: string): string {
+  return joinPath(materialDirectory, `${rendererName}.avif`);
 }
 
 export function rendererReportPath(materialDirectory: string, rendererName: string): string {

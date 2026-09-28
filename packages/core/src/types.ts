@@ -53,7 +53,7 @@ export interface CreateReferencesOptions {
 export interface RenderFailure {
   rendererName: string;
   materialPath: string;
-  outputPngPath: string;
+  outputImagePath: string;
   error: Error;
   logs?: RenderLogEntry[];
 }
@@ -75,7 +75,7 @@ export interface CreateReferencesProgressEvent {
   phase: 'start' | 'finish';
   rendererName: string;
   materialPath: string;
-  outputPngPath: string;
+  outputImagePath: string;
   total: number;
   started: number;
   completed: number;

@@ -105,8 +105,8 @@ describe('calculateMetrics', () => {
     await mkdir(skippedMaterialDir, { recursive: true });
     await writeFile(path.join(materialDir, 'included.mtlx'), '<materialx />', 'utf8');
     await writeFile(path.join(skippedMaterialDir, 'skipped.mtlx'), '<materialx />', 'utf8');
-    await writeFile(path.join(materialDir, 'materialx-glsl.png'), createSolidPngBuffer(0, 0, 0));
-    await writeFile(path.join(materialDir, 'threejs-new.png'), createSolidPngBuffer(255, 255, 255));
+    await writeFile(path.join(materialDir, 'materialx-glsl.avif'), createSolidPngBuffer(0, 0, 0));
+    await writeFile(path.join(materialDir, 'threejs-new.avif'), createSolidPngBuffer(255, 255, 255));
 
     const result = await calculateMetrics({
       submodulesRoot,
