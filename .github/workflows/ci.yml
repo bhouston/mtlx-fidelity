@@ -30,9 +30,9 @@ jobs:
         run: |
           # Runners have no SSH keys; rewrite the git@github.com submodule URLs to HTTPS.
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git submodule sync -- submodules/material-samples submodules/material-viewer submodules/three.js
+          git submodule sync -- submodules/mtlx-sample-library submodules/material-viewer submodules/three.js
           git submodule update --init --depth 1 \
-            submodules/material-samples \
+            submodules/mtlx-sample-library \
             submodules/material-viewer \
             submodules/three.js
       - uses: pnpm/action-setup@v5

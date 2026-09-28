@@ -2,7 +2,7 @@ import path from 'node:path';
 import { access, writeFile } from 'node:fs/promises';
 import { readMaterialX, validateDocument } from '@material-viewer/mtlx-core';
 import type { MaterialXDocument, MaterialXInput, MaterialXNode } from '@material-viewer/mtlx-core';
-import { RenderValidationReportSchema, type RenderReportIssue } from '@material-fidelity/samples';
+import { RenderValidationReportSchema, type RenderReportIssue } from '@mtlx-fidelity/samples';
 
 const UNKNOWN_NODE_CATEGORY_PREFIX = 'Unknown node category "';
 

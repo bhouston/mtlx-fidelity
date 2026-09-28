@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** Matches `@material-fidelity/core` `RendererCategory`. */
+/** Matches `@mtlx-fidelity/core` `RendererCategory`. */
 export type RendererCategory = 'pathtracer' | 'raytracer' | 'rasterizer';
 
 export interface RendererDescriptor {

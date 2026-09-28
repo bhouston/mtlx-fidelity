@@ -9,7 +9,7 @@ import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 
 /** Injected into the client bundle; override via env at build time (see Dockerfile `ARG` / `ENV`). */
-const DEFAULT_SITE_NAME = 'MaterialX Fidelity Test Suite';
+const DEFAULT_SITE_NAME = 'MTLX Fidelity';
 const DEFAULT_SITE_DESCRIPTION =
   'Browse MaterialX sample materials and compare renderer reference output side-by-side to spot visual differences and inspect render logs.';
 const DEFAULT_SITE_IMAGE = '/Preview.webp';

@@ -1,5 +1,5 @@
 {
-  "name": "material-fidelity",
+  "name": "mtlx-fidelity",
   "version": "0.1.0",
   "private": true,
   "description": "MaterialX fidelity test system for reference image generation and comparison workflows.",
@@ -26,9 +26,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "cli": "pnpm --filter @material-fidelity/cli start",
-    "viewer": "pnpm --filter @material-fidelity/viewer dev",
-    "viewer:build": "pnpm --filter @material-fidelity/viewer build"
+    "cli": "pnpm --filter @mtlx-fidelity/cli start",
+    "viewer": "pnpm --filter @mtlx-fidelity/viewer dev",
+    "viewer:build": "pnpm --filter @mtlx-fidelity/viewer build"
   },
   "dependencies": {
     "rimraf": "^6.1.3",
@@ -49,10 +49,10 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "oxfmt",
-      "oxlint --fix"
+      "oxfmt --no-error-on-unmatched-pattern",
+      "oxlint --fix --no-error-on-unmatched-pattern"
     ],
-    "*.{json,jsonc,md,mdx,css,html,yml,yaml}": "oxfmt"
+    "*.{json,jsonc,md,mdx,css,html,yml,yaml}": "oxfmt --no-error-on-unmatched-pattern"
   },
   "engines": {
     "node": ">=22"

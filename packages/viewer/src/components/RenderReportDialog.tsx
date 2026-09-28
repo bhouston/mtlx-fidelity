@@ -7,7 +7,7 @@ import {
   type RenderReport,
   type RenderReportError,
   type RenderReportIssue,
-} from '@material-fidelity/samples';
+} from '@mtlx-fidelity/samples';
 import { RenderLogViewer } from '#/components/RenderLogViewer';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '#/components/ui/dialog';
 
@@ -38,8 +38,8 @@ const getRenderReport = createServerFn({
   .inputValidator((data: { reportUrl: string }) => data)
   .handler(async ({ data }) => {
     const { readFile } = await import('node:fs/promises');
-    const { rendererReportPath } = await import('@material-fidelity/samples');
-    const { pathExists, resolveMaterialDirectory, resolveSampleRoots } = await import('@material-fidelity/samples-io');
+    const { rendererReportPath } = await import('@mtlx-fidelity/samples');
+    const { pathExists, resolveMaterialDirectory, resolveSampleRoots } = await import('@mtlx-fidelity/samples-io');
 
     const { materialType, materialName, rendererName } = parseReportUrl(data.reportUrl);
     const roots = resolveSampleRoots();

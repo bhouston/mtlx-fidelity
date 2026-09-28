@@ -6,15 +6,15 @@ import {
   getSamplesRootFromSubmodules,
   materialMatchesSelector,
   metricsPathForMaterialFile,
-} from '@material-fidelity/samples';
-import { findMtlxMaterialFiles } from '@material-fidelity/samples-io';
-import type { ImageSimilarityMetrics, MaterialMetricsFile } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/samples';
+import { findMtlxMaterialFiles } from '@mtlx-fidelity/samples-io';
+import type { ImageSimilarityMetrics, MaterialMetricsFile } from '@mtlx-fidelity/samples';
 import { readImageAsRawRgba } from './image-empty-check.js';
 
 const REFERENCE_RENDERER_NAME = 'materialx-glsl';
 const METRICS_DECIMAL_PLACES = 3;
 
-export type { ImageSimilarityMetrics, MaterialMetricsFile } from '@material-fidelity/samples';
+export type { ImageSimilarityMetrics, MaterialMetricsFile } from '@mtlx-fidelity/samples';
 
 export interface CalculateMetricsOptions {
   submodulesRoot: string;
@@ -155,7 +155,7 @@ export async function calculateMetrics(options: CalculateMetricsOptions): Promis
   const materialsRoot = getMaterialsRoot(samplesRoot);
 
   if (!(await fileExists(samplesRoot))) {
-    throw new Error(`Missing required material-samples directory at ${samplesRoot}.`);
+    throw new Error(`Missing required mtlx-sample-library directory at ${samplesRoot}.`);
   }
   if (!(await fileExists(materialsRoot))) {
     throw new Error(`Missing required materials directory at ${materialsRoot}.`);

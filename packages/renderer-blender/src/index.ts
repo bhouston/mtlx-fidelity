@@ -14,16 +14,16 @@ import {
   type RendererContext,
   type RendererPrerequisiteCheckResult,
   type RendererStartOptions,
-} from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 const BLENDER_EXECUTABLE_ENV = 'BLENDER_EXECUTABLE';
 const BLENDER_NODES_EXECUTABLE_ENV = 'BLENDER_NODES_EXECUTABLE';
 const MACOS_APPLICATIONS_DIRECTORY = '/Applications';
 const BLENDER_PROCESS_TERMINATION_GRACE_MS = 1000;
 const BLENDER_MATERIALX_IMPORTER_REQUIRED_FILES = [
-  ['blender-materialx-importer', 'materialx_importer', '__init__.py'],
-  ['blender-materialx-importer', 'materialx_importer', 'importer.py'],
+  ['mtlx-blender-importer', 'materialx_importer', '__init__.py'],
+  ['mtlx-blender-importer', 'materialx_importer', 'importer.py'],
 ];
 const MX_NOISE_NODE_TYPES = [
   'ShaderNodeMxNoise2D',
@@ -605,7 +605,7 @@ class BlenderRenderer implements FidelityRenderer {
     }
 
     const scriptPath = this.scriptPath;
-    const templateDirectory = await mkdtemp(join(tmpdir(), 'material-fidelity-blender-'));
+    const templateDirectory = await mkdtemp(join(tmpdir(), 'mtlx-fidelity-blender-'));
     const templatePath = join(templateDirectory, 'template.blend');
     const args = [
       '--background',

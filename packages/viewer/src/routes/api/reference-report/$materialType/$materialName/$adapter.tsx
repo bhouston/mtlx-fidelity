@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { readFile } from 'node:fs/promises';
-import { rendererReportPath } from '@material-fidelity/samples';
-import { pathExists, resolveMaterialDirectory, resolveSampleRoots } from '@material-fidelity/samples-io';
+import { rendererReportPath } from '@mtlx-fidelity/samples';
+import { pathExists, resolveMaterialDirectory, resolveSampleRoots } from '@mtlx-fidelity/samples-io';
 import { referenceAssetGetResponse } from '#/lib/reference-asset-response.server';
 
 export const Route = createFileRoute('/api/reference-report/$materialType/$materialName/$adapter')({

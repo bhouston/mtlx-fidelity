@@ -3,7 +3,7 @@ import { dirname, joinPath } from './path-utils.js';
 export const METRICS_FILE_NAME = 'metrics.json';
 
 export function getSamplesRootFromSubmodules(submodulesRoot: string): string {
-  return joinPath(submodulesRoot, 'material-samples');
+  return joinPath(submodulesRoot, 'mtlx-sample-library');
 }
 
 export function getMaterialsRoot(samplesRoot: string): string {

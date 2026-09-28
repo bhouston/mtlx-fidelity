@@ -6,11 +6,11 @@ import {
   sortMaterialTypes,
   type RendererCategory,
   type RendererDescriptor,
-} from '@material-fidelity/samples';
-import { MaterialSamples, pathExists, resolveSampleRoots } from '@material-fidelity/samples-io';
+} from '@mtlx-fidelity/samples';
+import { MaterialSamples, pathExists, resolveSampleRoots } from '@mtlx-fidelity/samples-io';
 import { contentHashFromBytes } from './reference-asset-response.server.ts';
 
-const MATERIAL_SOURCE_BASE_URL = 'https://github.com/bhouston/material-samples/tree/main/materials';
+const MATERIAL_SOURCE_BASE_URL = 'https://github.com/bhouston/mtlx-sample-library/tree/main/materials';
 const HOMAGE_VIEWER_BASE_URL = 'https://materialx.ben3d.ca';
 const DEFAULT_LOCAL_HOST = 'localhost:3000';
 const DEFAULT_PRODUCTION_HOST = 'material-fidelity.ben3d.ca';

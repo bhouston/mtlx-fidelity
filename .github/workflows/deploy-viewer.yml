@@ -6,8 +6,12 @@ on:
       - main
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
   deploy:
     name: Deploy viewer to Cloud Run
+    needs: ci
     uses: ./.github/workflows/deploy-service.yml
     with:
       service_name: material-fidelity

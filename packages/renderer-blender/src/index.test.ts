@@ -32,8 +32,8 @@ async function createFile(filePath: string): Promise<void> {
 
 async function createBlenderMaterialXImporterFiles(submodulesRoot: string): Promise<void> {
   await Promise.all([
-    createFile(path.join(submodulesRoot, 'blender-materialx-importer', 'materialx_importer', '__init__.py')),
-    createFile(path.join(submodulesRoot, 'blender-materialx-importer', 'materialx_importer', 'importer.py')),
+    createFile(path.join(submodulesRoot, 'mtlx-blender-importer', 'materialx_importer', '__init__.py')),
+    createFile(path.join(submodulesRoot, 'mtlx-blender-importer', 'materialx_importer', 'importer.py')),
   ]);
 }
 
@@ -232,7 +232,7 @@ describe('blender renderer', () => {
       {
         code: 0,
         stdout: [
-          '00:00.302  blend            | Read blend: "/tmp/material-fidelity-blender-abc/template.blend"',
+          '00:00.302  blend            | Read blend: "/tmp/mtlx-fidelity-blender-abc/template.blend"',
           "00:04.658  render           | Saved: '/tmp/example/blender-new-temp.png'",
           'render started',
           '{"event":"blender-new-render-start","warnings":["MaterialX noise node fractal2d is using Blender fallback"]}',
@@ -243,8 +243,8 @@ describe('blender renderer', () => {
       },
     ]);
     const submodulesRoot = await makeBlenderSubmodulesRoot();
-    const viewerRoot = path.join(submodulesRoot, 'material-samples', 'viewer');
-    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials', 'example');
+    const viewerRoot = path.join(submodulesRoot, 'mtlx-sample-library', 'viewer');
+    const materialsRoot = path.join(submodulesRoot, 'mtlx-sample-library', 'materials', 'example');
     const materialPath = path.join(materialsRoot, 'example.mtlx');
     const outputPath = path.join(materialsRoot, 'blender-new-temp.png');
     const modelPath = path.join(viewerRoot, 'ShaderBall.glb');
@@ -322,8 +322,8 @@ describe('blender renderer', () => {
       { code: 0, stdout: 'render finished\n' },
     ]);
     const submodulesRoot = await makeBlenderSubmodulesRoot();
-    const viewerRoot = path.join(submodulesRoot, 'material-samples', 'viewer');
-    const materialsRoot = path.join(submodulesRoot, 'material-samples', 'materials', 'example');
+    const viewerRoot = path.join(submodulesRoot, 'mtlx-sample-library', 'viewer');
+    const materialsRoot = path.join(submodulesRoot, 'mtlx-sample-library', 'materials', 'example');
     const materialPath = path.join(materialsRoot, 'example.mtlx');
     const outputPath = path.join(materialsRoot, 'blender-eevee-nodes.png');
     const modelPath = path.join(viewerRoot, 'ShaderBall.glb');

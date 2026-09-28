@@ -85,10 +85,17 @@ describe('calculateMetrics', () => {
   it('writes per-material metrics for selected renderers', async () => {
     const root = await makeTempDir('fidelity-metrics-');
     const submodulesRoot = path.join(root, 'submodules');
-    const materialDir = path.join(submodulesRoot, 'material-samples', 'materials', 'surfaces', 'gltf_pbr', 'included');
+    const materialDir = path.join(
+      submodulesRoot,
+      'mtlx-sample-library',
+      'materials',
+      'surfaces',
+      'gltf_pbr',
+      'included',
+    );
     const skippedMaterialDir = path.join(
       submodulesRoot,
-      'material-samples',
+      'mtlx-sample-library',
       'materials',
       'surfaces',
       'gltf_pbr',

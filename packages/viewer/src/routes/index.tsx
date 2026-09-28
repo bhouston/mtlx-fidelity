@@ -290,7 +290,7 @@ function App() {
               <li>
                 <a
                   className="underline underline-offset-2 hover:no-underline"
-                  href="https://github.com/bhouston/material-fidelity"
+                  href="https://github.com/bhouston/mtlx-fidelity"
                   target="_blank"
                 >
                   Add your own renderer here.
@@ -299,7 +299,7 @@ function App() {
               <li>
                 <a
                   className="underline underline-offset-2 hover:no-underline"
-                  href="https://github.com/bhouston/material-samples"
+                  href="https://github.com/bhouston/mtlx-sample-library"
                   target="_blank"
                 >
                   Add more reference samples here.
@@ -307,6 +307,21 @@ function App() {
               </li>
             </ul>
           </div>
+          <p className="mt-3 max-w-5xl text-sm leading-6 text-muted-foreground sm:text-base">
+            MTLX Fidelity is part of the{' '}
+            <a className="underline underline-offset-2 hover:no-underline" href="https://mtlx.ai" target="_blank">
+              mtlx suite of tools
+            </a>{' '}
+            (
+            <a
+              className="underline underline-offset-2 hover:no-underline"
+              href="https://github.com/bhouston/mtlx"
+              target="_blank"
+            >
+              GitHub
+            </a>
+            ).
+          </p>
           <p className="mt-3 max-w-5xl text-sm leading-6 text-muted-foreground sm:text-base">
             This is an independent project maintained by{' '}
             <a className="underline underline-offset-2 hover:no-underline" href="https://ben3d.ca" target="_blank">

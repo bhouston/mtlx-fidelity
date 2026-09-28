@@ -51,19 +51,19 @@ importers:
 
   packages/cli:
     dependencies:
-      '@material-fidelity/core':
+      '@mtlx-fidelity/core':
         specifier: workspace:*
         version: link:../core
-      '@material-fidelity/renderer-blender':
+      '@mtlx-fidelity/renderer-blender':
         specifier: workspace:*
         version: link:../renderer-blender
-      '@material-fidelity/renderer-materialxview':
+      '@mtlx-fidelity/renderer-materialxview':
         specifier: workspace:*
         version: link:../renderer-materialxview
-      '@material-fidelity/renderer-threejs':
+      '@mtlx-fidelity/renderer-threejs':
         specifier: workspace:*
         version: link:../renderer-threejs
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
       humanize-units:
@@ -88,10 +88,10 @@ importers:
 
   packages/core:
     dependencies:
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
-      '@material-fidelity/samples-io':
+      '@mtlx-fidelity/samples-io':
         specifier: workspace:*
         version: link:../samples-io
       '@material-viewer/mtlx-core':
@@ -113,28 +113,28 @@ importers:
 
   packages/renderer-blender:
     dependencies:
-      '@material-fidelity/core':
+      '@mtlx-fidelity/core':
         specifier: workspace:*
         version: link:../core
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
 
   packages/renderer-materialxview:
     dependencies:
-      '@material-fidelity/core':
+      '@mtlx-fidelity/core':
         specifier: workspace:*
         version: link:../core
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
 
   packages/renderer-threejs:
     dependencies:
-      '@material-fidelity/core':
+      '@mtlx-fidelity/core':
         specifier: workspace:*
         version: link:../core
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
       '@vitejs/plugin-react':
@@ -173,7 +173,7 @@ importers:
 
   packages/samples-io:
     dependencies:
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
       jszip:
@@ -182,19 +182,19 @@ importers:
 
   packages/viewer:
     dependencies:
-      '@material-fidelity/renderer-blender':
+      '@mtlx-fidelity/renderer-blender':
         specifier: workspace:*
         version: link:../renderer-blender
-      '@material-fidelity/renderer-materialxview':
+      '@mtlx-fidelity/renderer-materialxview':
         specifier: workspace:*
         version: link:../renderer-materialxview
-      '@material-fidelity/renderer-threejs':
+      '@mtlx-fidelity/renderer-threejs':
         specifier: workspace:*
         version: link:../renderer-threejs
-      '@material-fidelity/samples':
+      '@mtlx-fidelity/samples':
         specifier: workspace:*
         version: link:../samples
-      '@material-fidelity/samples-io':
+      '@mtlx-fidelity/samples-io':
         specifier: workspace:*
         version: link:../samples-io
       '@radix-ui/react-dialog':

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { getMaterialsRoot, getSamplesRootFromSubmodules, type SampleRoots } from '@material-fidelity/samples';
+import { getMaterialsRoot, getSamplesRootFromSubmodules, type SampleRoots } from '@mtlx-fidelity/samples';
 
 const cachedRootsByInvocationCwd = new Map<string, SampleRoots>();
 

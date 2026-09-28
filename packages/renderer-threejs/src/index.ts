@@ -13,8 +13,8 @@ import {
   type RendererContext,
   type RendererPrerequisiteCheckResult,
   type RendererStartOptions,
-} from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 interface RuntimeState {
   baseUrl: string;
@@ -202,7 +202,7 @@ class ThreeJsRenderer implements FidelityRenderer {
     }
 
     try {
-      const samplesRoot = join(this.submodulesRoot, 'material-samples');
+      const samplesRoot = join(this.submodulesRoot, 'mtlx-sample-library');
       const viewerRoot = join(samplesRoot, 'viewer');
       const requiredFiles = [join(viewerRoot, VIEWER_HDR_FILENAME), join(viewerRoot, VIEWER_MODEL_FILENAME)];
       if (this.materialXLoaderVariant === 'custom') {

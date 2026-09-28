@@ -1,5 +1,5 @@
 {
-  "name": "@material-fidelity/core",
+  "name": "@mtlx-fidelity/core",
   "version": "0.1.0",
   "source": "./src/index.ts",
   "files": [
@@ -14,9 +14,9 @@
     "dev": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@material-fidelity/samples": "workspace:*",
-    "@material-fidelity/samples-io": "workspace:*",
     "@material-viewer/mtlx-core": "workspace:*",
+    "@mtlx-fidelity/samples": "workspace:*",
+    "@mtlx-fidelity/samples-io": "workspace:*",
     "p-limit": "^7.3.0",
     "pngjs": "^7.0.0",
     "sharp": "^0.34.5"

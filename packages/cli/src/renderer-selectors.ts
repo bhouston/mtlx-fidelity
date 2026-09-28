@@ -1,4 +1,4 @@
-import type { FidelityRenderer } from '@material-fidelity/core';
+import type { FidelityRenderer } from '@mtlx-fidelity/core';
 
 interface ResolveRendererNamesOptions {
   defaultToAll: boolean;

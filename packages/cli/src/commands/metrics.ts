@@ -2,22 +2,22 @@ import path from 'node:path';
 import { availableParallelism } from 'node:os';
 import { createElement, useEffect, useMemo, useState } from 'react';
 import { render, useApp } from 'ink';
-import { calculateMetrics } from '@material-fidelity/core';
-import type { CalculateMetricsProgressEvent, CalculateMetricsResult, FidelityRenderer } from '@material-fidelity/core';
+import { calculateMetrics } from '@mtlx-fidelity/core';
+import type { CalculateMetricsProgressEvent, CalculateMetricsResult, FidelityRenderer } from '@mtlx-fidelity/core';
 import {
   createEeveeNodesRenderer as createBlenderEeveeNodesRenderer,
   createNodesRenderer as createBlenderNodesRenderer,
   createRenderer as createBlenderRenderer,
-} from '@material-fidelity/renderer-blender';
+} from '@mtlx-fidelity/renderer-blender';
 import {
   createGlslRenderer as createMaterialXGlslRenderer,
   createMetalRenderer as createMaterialXMetalRenderer,
   createOslRenderer as createMaterialXOslRenderer,
-} from '@material-fidelity/renderer-materialxview';
+} from '@mtlx-fidelity/renderer-materialxview';
 import {
   createCurrentRenderer as createThreeJsCurrentRenderer,
   createRenderer as createThreeJsNewRenderer,
-} from '@material-fidelity/renderer-threejs';
+} from '@mtlx-fidelity/renderer-threejs';
 import { humanizeTime } from 'humanize-units';
 import { defineCommand } from 'yargs-file-commands';
 import { resolveRendererNames } from '../renderer-selectors.js';
@@ -99,7 +99,7 @@ function InkCalculateMetricsApp({ args, onComplete, onError }: InkCalculateMetri
 
   useEffect(() => {
     let active = true;
-    const materialsRoot = path.join(args.submodulesRoot, 'material-samples', 'materials');
+    const materialsRoot = path.join(args.submodulesRoot, 'mtlx-sample-library', 'materials');
 
     const applyProgress = (event: CalculateMetricsProgressEvent) => {
       if (!active) {

@@ -11,8 +11,8 @@ import {
   type GenerateImageResult,
   type RendererPrerequisiteCheckResult,
   type RendererStartOptions,
-} from '@material-fidelity/core';
-import type { RenderLogEntry } from '@material-fidelity/samples';
+} from '@mtlx-fidelity/core';
+import type { RenderLogEntry } from '@mtlx-fidelity/samples';
 
 const PACKAGE_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = join(PACKAGE_ROOT, '..', '..');

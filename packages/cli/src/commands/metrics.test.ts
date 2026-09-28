@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { command } from './metrics.js';
-import type { calculateMetrics } from '@material-fidelity/core';
+import type { calculateMetrics } from '@mtlx-fidelity/core';
 
 const { availableParallelismMock, calculateMetricsMock } = vi.hoisted(() => ({
   availableParallelismMock: vi.fn<() => number>(() => 8),
@@ -15,28 +15,28 @@ vi.mock('node:os', async (importActual) => {
   };
 });
 
-vi.mock('@material-fidelity/core', async (importActual) => {
-  const actual = await importActual<typeof import('@material-fidelity/core')>();
+vi.mock('@mtlx-fidelity/core', async (importActual) => {
+  const actual = await importActual<typeof import('@mtlx-fidelity/core')>();
   return {
     ...actual,
     calculateMetrics: calculateMetricsMock,
   };
 });
 
-vi.mock('@material-fidelity/renderer-blender', () => ({
+vi.mock('@mtlx-fidelity/renderer-blender', () => ({
   createRenderer: () => ({ name: 'blender-new' }),
   createNodesRenderer: () => ({ name: 'blender-nodes' }),
   createEeveeNodesRenderer: () => ({ name: 'blender-eevee-nodes' }),
 }));
 
-vi.mock('@material-fidelity/renderer-materialxview', () => ({
+vi.mock('@mtlx-fidelity/renderer-materialxview', () => ({
   createRenderer: () => ({ name: 'materialx-glsl' }),
   createGlslRenderer: () => ({ name: 'materialx-glsl' }),
   createMetalRenderer: () => ({ name: 'materialx-metal' }),
   createOslRenderer: () => ({ name: 'materialx-osl' }),
 }));
 
-vi.mock('@material-fidelity/renderer-threejs', () => ({
+vi.mock('@mtlx-fidelity/renderer-threejs', () => ({
   createRenderer: () => ({ name: 'threejs-new' }),
   createCurrentRenderer: () => ({ name: 'threejs-current' }),
 }));

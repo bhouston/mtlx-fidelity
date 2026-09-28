@@ -2,7 +2,7 @@ import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { rendererReportPath, type RenderReport, type RenderResultReport } from '@material-fidelity/samples';
+import { rendererReportPath, type RenderReport, type RenderResultReport } from '@mtlx-fidelity/samples';
 import { readRendererReportJson, summarizeRendererReport } from './renderer-report-io.js';
 
 describe('readRendererReportJson', () => {

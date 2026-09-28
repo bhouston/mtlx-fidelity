@@ -31,7 +31,7 @@ on:
         type: string
         description: >-
           recursive — git submodule update --init --recursive (all submodules).
-          viewer — only submodules/material-samples, material-viewer, and three.js (smaller/faster Docker context; no Blender/MaterialX/OSL sources).
+          viewer — only submodules/mtlx-sample-library, material-viewer, and three.js (smaller/faster Docker context; no Blender/MaterialX/OSL sources).
         default: 'recursive'
     secrets:
       GCP_SA_KEY:
@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-          # viewer: disable recursive submodule fetch here; next step inits only material-samples + material-viewer + three.js
+          # viewer: disable recursive submodule fetch here; next step inits only mtlx-sample-library + material-viewer + three.js
           submodules: ${{ inputs.submodules != 'viewer' && 'recursive' || false }}
 
       - name: Checkout viewer submodules
@@ -60,9 +60,9 @@ jobs:
           set -e
           # Runners have no SSH keys; any leftover git@github.com submodule URL must clone over HTTPS.
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git submodule sync -- submodules/material-samples submodules/material-viewer submodules/three.js
+          git submodule sync -- submodules/mtlx-sample-library submodules/material-viewer submodules/three.js
           git submodule update --init --depth 1 \
-            submodules/material-samples \
+            submodules/mtlx-sample-library \
             submodules/material-viewer \
             submodules/three.js
 

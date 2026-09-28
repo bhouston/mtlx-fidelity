@@ -4,7 +4,7 @@ import {
   rendererReportPath,
   type RenderReport,
   type RendererReportSummary,
-} from '@material-fidelity/samples';
+} from '@mtlx-fidelity/samples';
 import { pathExists } from './fs-utils.js';
 
 export function summarizeRendererReport(report: RenderReport): RendererReportSummary {

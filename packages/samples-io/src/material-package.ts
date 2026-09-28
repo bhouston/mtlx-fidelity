@@ -1,6 +1,6 @@
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
-import type { MtlzMetadata } from '@material-fidelity/samples';
+import type { MtlzMetadata } from '@mtlx-fidelity/samples';
 import JSZip from 'jszip';
 
 const IMAGE_EXTENSIONS = new Set([
@@ -209,7 +209,7 @@ export async function createMaterialPackage(options: CreateMaterialPackageOption
   const bytes = await zip.generateAsync({
     type: 'uint8array',
     compression: 'STORE',
-    comment: 'material-fidelity mtlz-layout',
+    comment: 'mtlx-fidelity mtlz-layout',
   });
 
   const suggestedBasename = rootMtlxName.replace(/\.mtlx$/i, '') || 'material';

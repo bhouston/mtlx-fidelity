@@ -10,8 +10,8 @@ import {
   RenderResultReportSchema,
   type RenderLogEntry,
   type RenderReportIssue,
-} from '@material-fidelity/samples';
-import { findMtlxMaterialFiles } from '@material-fidelity/samples-io';
+} from '@mtlx-fidelity/samples';
+import { findMtlxMaterialFiles } from '@mtlx-fidelity/samples-io';
 import { assertRenderIsNotEmpty, calculateImageNormalizedRgbRms } from './image-empty-check.js';
 import {
   formatFatalValidationIssues,
@@ -134,7 +134,7 @@ export async function createReferences(options: CreateReferencesOptions): Promis
   try {
     await access(samplesRoot);
   } catch {
-    throw new Error(`Missing required material-samples directory at ${samplesRoot}.`);
+    throw new Error(`Missing required mtlx-sample-library directory at ${samplesRoot}.`);
   }
 
   try {

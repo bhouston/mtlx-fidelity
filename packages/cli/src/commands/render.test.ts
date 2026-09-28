@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { command } from './render.js';
-import type { createReferences } from '@material-fidelity/core';
+import type { createReferences } from '@mtlx-fidelity/core';
 
 const { availableParallelismMock, createReferencesMock } = vi.hoisted(() => ({
   availableParallelismMock: vi.fn<() => number>(() => 8),
@@ -15,11 +15,11 @@ vi.mock('node:os', async (importActual) => {
   };
 });
 
-vi.mock('@material-fidelity/core', () => ({
+vi.mock('@mtlx-fidelity/core', () => ({
   createReferences: createReferencesMock,
 }));
 
-vi.mock('@material-fidelity/renderer-blender', () => ({
+vi.mock('@mtlx-fidelity/renderer-blender', () => ({
   createRenderer: () => ({
     name: 'blender-new',
     version: 'test',
@@ -46,7 +46,7 @@ vi.mock('@material-fidelity/renderer-blender', () => ({
   }),
 }));
 
-vi.mock('@material-fidelity/renderer-materialxview', () => ({
+vi.mock('@mtlx-fidelity/renderer-materialxview', () => ({
   createRenderer: () => ({
     name: 'materialx-glsl',
     version: 'test',
@@ -81,7 +81,7 @@ vi.mock('@material-fidelity/renderer-materialxview', () => ({
   }),
 }));
 
-vi.mock('@material-fidelity/renderer-threejs', () => ({
+vi.mock('@mtlx-fidelity/renderer-threejs', () => ({
   createRenderer: () => ({
     name: 'threejs-new',
     version: 'test',

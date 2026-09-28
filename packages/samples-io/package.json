@@ -1,5 +1,5 @@
 {
-  "name": "@material-fidelity/samples-io",
+  "name": "@mtlx-fidelity/samples-io",
   "version": "0.1.0",
   "source": "./src/index.ts",
   "files": [
@@ -20,7 +20,7 @@
     "dev": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@material-fidelity/samples": "workspace:*",
+    "@mtlx-fidelity/samples": "workspace:*",
     "jszip": "^3.10.1"
   },
   "devDependencies": {}
