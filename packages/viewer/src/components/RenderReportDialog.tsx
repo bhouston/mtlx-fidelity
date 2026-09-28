@@ -35,7 +35,7 @@ function parseReportUrl(reportUrl: string): { materialType: string; materialName
 const getRenderReport = createServerFn({
   method: 'GET',
 })
-  .inputValidator((data: { reportUrl: string }) => data)
+  .validator((data: { reportUrl: string }) => data)
   .handler(async ({ data }) => {
     const { readFile } = await import('node:fs/promises');
     const { rendererReportPath } = await import('@mtlx-fidelity/samples');
