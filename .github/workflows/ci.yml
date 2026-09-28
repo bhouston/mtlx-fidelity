@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Checkout build/test submodules
+        run: |
+          set -e
+          # Runners have no SSH keys; submodule URLs must clone over HTTPS.
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule sync -- submodules/material-samples submodules/material-viewer submodules/three.js
+          git submodule update --init --depth 1 \
+            submodules/material-samples \
+            submodules/material-viewer \
+            submodules/three.js
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Validate issue link
+        if: github.event_name == 'pull_request'
+        run: node scripts/check-pr.mjs
+      - name: Lint PR title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint
+      - name: Lint feature commits
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA"
+      - run: pnpm build
+      - run: pnpm tsc
+      - run: pnpm lint
+      - run: pnpm test
+      - name: Audit dependencies
+        id: audit
+        continue-on-error: true
+        run: pnpm audit --audit-level=high
+      - name: Flag audit findings
+        if: steps.audit.outcome == 'failure'
+        run: echo '::warning::Dependency audit found vulnerabilities or could not reach the registry. Review the audit step.'
