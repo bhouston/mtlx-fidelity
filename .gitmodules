@@ -10,7 +10,7 @@
 [submodule "third_party/three.js"]
 	path = submodules/three.js
 	url = git@github.com:bhouston/three.js.git
-	branch = materialx-upgrade
+	branch = materialx-pr-34593
 [submodule "third_party/blender"]
 	path = submodules/blender
 	url = git@git.blender.org:Ben-Houston/blender.git

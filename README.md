@@ -14,7 +14,8 @@ Every material is rendered through MaterialX reference backends and compared sid
 
 ## Related Work
 
-- **[Three.js PR #33485](https://github.com/mrdoob/three.js/pull/33485)** — MaterialX upgrade: near-perfect fidelity across all 400+ samples, new `open_pbr_surface` / `gltf_pbr` support, archive loading, corrected noise implementations.
+- **[Three.js PR #33485](https://github.com/mrdoob/three.js/pull/33485)** — MaterialX upgrade: near-perfect fidelity across all 400+ samples, new `open_pbr_surface` / `gltf_pbr` support, archive loading, corrected noise implementations. Merged and shipped in the official `MaterialXLoader` (`threejs-current`).
+- **[Three.js PR #34593](https://github.com/mrdoob/three.js/pull/34593)** — MaterialX nodedef defaults, built on top of the `dev` branch tip (`threejs-new`).
 - **[mtlx-blender-importer](submodules/mtlx-blender-importer)** — Python importer that compiles MaterialX graphs into Blender node graphs, supporting both Cycles and Eevee.
 - **[Blender PR #158054](https://projects.blender.org/blender/blender/pulls/158054)** — Custom MaterialX noise nodes for Blender (Cycles OSL/GLSL and Eevee): `MxNoise`, `MxFractal`, `MxCellNoise`, `MxWorleyNoise`, `MxUnifiedNoise` in both 2D and 3D variants.
 
