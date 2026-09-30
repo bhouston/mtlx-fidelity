@@ -16,7 +16,7 @@ jobs:
     with:
       service_name: material-fidelity
       dockerfile: docker/results.Dockerfile
-      context: submodules/mtlx-sample-library/materials
+      context: '.'
       submodules: viewer
     secrets:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
