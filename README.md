@@ -209,6 +209,10 @@ pnpm fidelity:build    # export a static site to site/
 
 Production is a Docker image (`docker/results.Dockerfile`, built with `submodules/mtlx-sample-library/materials` as context) that runs `fidelity-kit process`, `hash`, then `serve`.
 
+## Results introduction
+
+Edit `results/index.md` to update the Markdown introduction above the fidelity comparisons. The `fidelity:process`, `fidelity:dev`, and `fidelity:build` scripts copy it to the sample-library results root before running fidelity-kit. The deployment Dockerfile copies the same source into `/data/index.md`; its build context is the repository root. Renderer descriptions are maintained in this file.
+
 ## License
 
 MIT. See `LICENSE`.

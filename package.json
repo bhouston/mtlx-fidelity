@@ -27,9 +27,10 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "cli": "pnpm --filter @mtlx-fidelity/cli start",
-    "fidelity:process": "fidelity-kit process submodules/mtlx-sample-library/materials",
-    "fidelity:dev": "fidelity-kit dev submodules/mtlx-sample-library/materials",
-    "fidelity:build": "fidelity-kit build submodules/mtlx-sample-library/materials --out site/"
+    "fidelity:process": "pnpm fidelity:prepare && fidelity-kit process submodules/mtlx-sample-library/materials",
+    "fidelity:dev": "pnpm fidelity:prepare && fidelity-kit dev submodules/mtlx-sample-library/materials",
+    "fidelity:build": "pnpm fidelity:prepare && fidelity-kit build submodules/mtlx-sample-library/materials --out site/",
+    "fidelity:prepare": "node scripts/prepare-results.mjs"
   },
   "dependencies": {
     "rimraf": "^6.1.3",
@@ -41,7 +42,7 @@
     "@types/node": "^25.6.0",
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^5.0.2",
-    "fidelity-kit": "^1.0.0",
+    "fidelity-kit": "^1.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "oxfmt": "^0.58.0",
