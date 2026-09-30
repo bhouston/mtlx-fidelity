@@ -41,7 +41,7 @@
     "@types/node": "^25.6.0",
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^5.0.2",
-    "fidelity-kit": "^0.2.0",
+    "fidelity-kit": "^1.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "oxfmt": "^0.58.0",
