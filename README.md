@@ -23,7 +23,6 @@ Every material is rendered through MaterialX reference backends and compared sid
 
 - `packages/core` - renderer interfaces and reference-generation orchestration.
 - `packages/cli` - command line tool for running renders.
-- `packages/viewer` - TanStack Start website for browsing fidelity images.
 - `packages/renderer-*` - renderer packages
 - `submodules/MaterialX` - custom MaterialX branch used by the MaterialXView GLSL/Metal and OSL reference renderers
 - `submodules/OpenShadingLanguage` - Open Shading Language sources used to provide **`oslc`** and **`testrender`** for the **`materialx-osl`** renderer (build/install instructions: `docs/building-openshadinglanguage.md`)
@@ -89,21 +88,9 @@ pnpm cli render
 pnpm cli render --renderers threejs-new --materials open_pbr
 ```
 
-This command writes `<renderer-name>.avif` in each directory containing a `.mtlx` material file.
+This command writes `beauty/<renderer-name>.avif` in each directory containing a `.mtlx` material file (the [fidelity-kit](https://github.com/bhouston/fidelity-kit) folder contract).
 
-Calculate visual similarity metrics against each material's `materialx-glsl.avif` reference:
-
-```bash
-# all renderers, all materials
-pnpm cli metrics
-```
-
-```bash
-# only calculate metrics for selected renderers/materials
-pnpm cli metrics --renderers threejs-current,threejs-new --materials open_pbr
-```
-
-This command writes `metrics.json` in each directory containing a `.mtlx` material file and a `materialx-glsl.avif` reference. Each file is keyed by renderer name and contains a `psnr` value.
+Metrics (PSNR, RMSE, MAE, max error) and delta images against the `materialx-glsl` reference are produced by fidelity-kit (see [Results site](#results-site)); there is no separate metrics command.
 
 Currently supported renderers:
 
@@ -121,9 +108,7 @@ Optional flags:
 - `--renderers <selector[,selector...]>` optional renderer filter; supports repeated flags, comma-separated values, and substring matches such as `threejs` or `blender`
 - `--materials <selector[,selector...]>` optional material filter; matches against each material directory name only (leaf directory), supports repeated flags, comma-separated values, substring matches, and regex selectors (`re:...` or `/.../flags`)
 - `--concurrency <number>` optional render concurrency; defaults to the recommended available parallelism, with a minimum of `1`
-- `--skip-existing` only render renderer/material pairs whose `<renderer-name>.avif` output does not already exist
-
-The `metrics` command supports the same `--renderers`, `--materials`, and `--concurrency` filters.
+- `--skip-existing` only render renderer/material pairs whose `beauty/<renderer-name>.avif` output does not already exist
 
 ## Material Organization
 
@@ -210,21 +195,19 @@ These values are intentionally aligned with `MaterialXView` defaults and its sce
 The **`materialx-glsl`** and **`materialx-metal`** reference renderers prefer MaterialXView binaries built from **`submodules/MaterialX`** (under `build/materialx-*`). **`materialx-osl`** uses the **`materialx-osl`** executable from **`submodules/MaterialX`** and, at run time, the Open Shading Language toolchain (**`oslc`**, **`testrender`**) from an install such as **`build/osl-dist/`** (see [docs/building-openshadinglanguage.md](docs/building-openshadinglanguage.md)).
 The Blender renderers follow the same scene contract through background Python scripts. **`blender-new`** uses the `submodules/mtlx-blender-importer` submodule with Blender's bundled MaterialX; **`blender-nodes`** and **`blender-eevee-nodes`** use the same importer but run against the **custom Blender build from the `submodules/blender` submodule** (patched MaterialX nodes).
 
-The importer is intentionally maintained as a separate project. This repository keeps the shader-ball setup, render orchestration, image outputs, metrics, and viewer used to validate its Cycles and Eevee fidelity.
+The importer is intentionally maintained as a separate project. This repository keeps the shader-ball setup, render orchestration, image outputs used to validate its Cycles and Eevee fidelity.
 
-## Viewer
+## Results site
 
-Run the MaterialX Fidelity Viewer:
+Comparison metrics, delta images, and the website come from [fidelity-kit](https://github.com/bhouston/fidelity-kit). Renderer settings live in `submodules/mtlx-sample-library/materials/fidelity.json` (`materialx-glsl` is the reference).
 
 ```bash
-pnpm viewer
+pnpm fidelity:dev      # process stale comparisons, then serve on http://localhost:3000
+pnpm fidelity:process  # only compute metrics and delta images
+pnpm fidelity:build    # export a static site to site/
 ```
 
-The viewer scans MaterialX materials and looks for images for the built-in renderer list (`materialx-glsl`, `materialx-metal`, `materialx-osl`, `blender-new`, `blender-nodes`, `blender-eevee-nodes`, `threejs-current`, `threejs-new`).
-
-The page groups materials by purpose/type (`showcase`, `nodes`, `open_pbr_surface`, `gltf_pbr`, `standard_surface`) and displays each renderer image (`<renderer>.avif`) side by side. Missing images render as a placeholder tile.
-When the URL does not include a `renderers` filter, the viewer defaults to showing `materialx-glsl`, `materialx-metal`, `materialx-osl`, `blender-nodes`, `blender-eevee-nodes`, and `threejs-new`; users can enable the other built-in renderers from the renderer filter UI.
-If a material directory contains `metrics.json`, the viewer displays each renderer's PSNR beneath its image. Material rows render lightweight placeholders until they are near the viewport, then load the image tiles, render reports, and metrics for smoother browsing.
+Production is a Docker image (`docker/results.Dockerfile`, built with `submodules/mtlx-sample-library/materials` as context) that runs `fidelity-kit process`, `hash`, then `serve`.
 
 ## License
 

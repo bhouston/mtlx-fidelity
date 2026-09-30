@@ -1,4 +1,4 @@
-name: Deploy viewer to Cloud Run
+name: Deploy results site to Cloud Run
 
 on:
   push:
@@ -10,13 +10,13 @@ jobs:
     uses: ./.github/workflows/ci.yml
 
   deploy:
-    name: Deploy viewer to Cloud Run
+    name: Deploy results site to Cloud Run
     needs: ci
     uses: ./.github/workflows/deploy-service.yml
     with:
       service_name: material-fidelity
-      dockerfile: packages/viewer/Dockerfile
-      context: .
+      dockerfile: docker/results.Dockerfile
+      context: submodules/mtlx-sample-library/materials
       submodules: viewer
     secrets:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
