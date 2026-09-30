@@ -130,6 +130,11 @@ afterEach(async () => {
   await Promise.all(tempDirs.splice(0).map(async (dir) => rm(dir, { recursive: true, force: true })));
 });
 
+async function writeBeauty(dir: string, name: string, data: string | Buffer): Promise<void> {
+  await mkdir(path.join(dir, 'beauty'), { recursive: true });
+  await writeFile(path.join(dir, 'beauty', name), data);
+}
+
 describe('createReferences', () => {
   it('renders an avif named after the adapter beside each material', async () => {
     const root = await makeTempDir('fidelity-');
@@ -164,13 +169,13 @@ describe('createReferences', () => {
       concurrency: 2,
     });
 
-    const outputImagePath = path.join(materialDir, 'fake.avif');
+    const outputImagePath = path.join(materialDir, 'beauty', 'fake.avif');
     const outputTempPngPath = path.join(materialDir, 'fake-temp.png');
-    const outputJsonPath = path.join(materialDir, 'fake.json');
+    const outputJsonPath = path.join(materialDir, 'beauty', 'fake.json');
     await access(outputImagePath);
     await access(outputJsonPath);
     await expect(access(outputTempPngPath)).rejects.toThrow('ENOENT');
-    await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'beauty', 'fake.webp'))).rejects.toThrow('ENOENT');
     const reportRecord = JSON.parse(await readFile(outputJsonPath, 'utf8')) as Record<string, unknown>;
     const report = parseRenderReport(reportRecord);
     expect(report.status).toBe('success');
@@ -205,9 +210,9 @@ describe('createReferences', () => {
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
     const existingAvif = await encodeAvif(NON_BLACK_PIXEL_PNG_BUFFER);
-    await writeFile(path.join(materialDir, 'fake.avif'), existingAvif);
-    await writeFile(path.join(materialDir, 'fake.png'), 'legacy png', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.webp'), 'legacy webp', 'utf8');
+    await writeBeauty(materialDir, 'fake.avif', existingAvif);
+    await writeBeauty(materialDir, 'fake.png', 'legacy png');
+    await writeBeauty(materialDir, 'fake.webp', 'legacy webp');
 
     const result = await createReferences({
       submodulesRoot,
@@ -216,11 +221,11 @@ describe('createReferences', () => {
       concurrency: 1,
     });
 
-    const finalAvif = await readFile(path.join(materialDir, 'fake.avif'));
+    const finalAvif = await readFile(path.join(materialDir, 'beauty', 'fake.avif'));
     expect(finalAvif.equals(existingAvif)).toBe(true);
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(materialDir, 'fake.png'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'beauty', 'fake.png'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'beauty', 'fake.webp'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(1);
     expect(result.failures).toHaveLength(0);
   });
@@ -237,7 +242,7 @@ describe('createReferences', () => {
     await writeFile(materialMtlxPath(materialDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.avif'), await encodeAvif(BLACK_PIXEL_PNG_BUFFER));
+    await writeBeauty(materialDir, 'fake.avif', await encodeAvif(BLACK_PIXEL_PNG_BUFFER));
 
     const result = await createReferences({
       submodulesRoot,
@@ -246,7 +251,7 @@ describe('createReferences', () => {
       concurrency: 1,
     });
 
-    const finalAvif = await readFile(path.join(materialDir, 'fake.avif'));
+    const finalAvif = await readFile(path.join(materialDir, 'beauty', 'fake.avif'));
     expect(finalAvif.equals(await encodeAvif(NON_BLACK_PIXEL_PNG_BUFFER))).toBe(true);
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(1);
@@ -271,9 +276,9 @@ describe('createReferences', () => {
     await writeFile(materialMtlxPath(missingDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(existingDir, 'fake.avif'), BLACK_PIXEL_PNG_BUFFER);
-    await writeFile(path.join(existingDir, 'alt.avif'), BLACK_PIXEL_PNG_BUFFER);
-    await writeFile(path.join(missingDir, 'alt.avif'), BLACK_PIXEL_PNG_BUFFER);
+    await writeBeauty(existingDir, 'fake.avif', BLACK_PIXEL_PNG_BUFFER);
+    await writeBeauty(existingDir, 'alt.avif', BLACK_PIXEL_PNG_BUFFER);
+    await writeBeauty(missingDir, 'alt.avif', BLACK_PIXEL_PNG_BUFFER);
 
     const result = await createReferences({
       submodulesRoot,
@@ -291,8 +296,8 @@ describe('createReferences', () => {
     expect(renderer.generateImage).toHaveBeenCalledWith(
       expect.objectContaining({ mtlxPath: materialMtlxPath(missingDir) }),
     );
-    expect((await readFile(path.join(existingDir, 'fake.avif'))).equals(BLACK_PIXEL_PNG_BUFFER)).toBe(true);
-    await expect(access(path.join(missingDir, 'fake.avif'))).resolves.toBeUndefined();
+    expect((await readFile(path.join(existingDir, 'beauty', 'fake.avif'))).equals(BLACK_PIXEL_PNG_BUFFER)).toBe(true);
+    await expect(access(path.join(missingDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
   });
 
   it('requires the expected viewer hdr and mesh filenames', async () => {
@@ -382,8 +387,8 @@ export function createAdapter() {
     expect(result.total).toBe(1);
     expect(result.attempted).toBe(1);
     expect(result.rendered).toBe(1);
-    await expect(access(path.join(includedDir, 'fake.avif'))).resolves.toBeUndefined();
-    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(skippedDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('discovers showcase materials recursively', async () => {
@@ -412,8 +417,8 @@ export function createAdapter() {
 
     expect(result.total).toBe(2);
     expect(result.rendered).toBe(2);
-    await expect(access(path.join(showcaseDir, 'fake.avif'))).resolves.toBeUndefined();
-    await expect(access(path.join(surfacesDir, 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(showcaseDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(surfacesDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
   });
 
   it('supports regex material selectors against material directory names', async () => {
@@ -456,8 +461,8 @@ export function createAdapter() {
     expect(result.total).toBe(1);
     expect(result.attempted).toBe(1);
     expect(result.rendered).toBe(1);
-    await expect(access(path.join(includedDir, 'fake.avif'))).resolves.toBeUndefined();
-    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(skippedDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('does not match material selectors against parent directories', async () => {
@@ -487,8 +492,8 @@ export function createAdapter() {
       }),
     ).rejects.toThrow('No .mtlx files matched --materials "gltf_pbr".');
 
-    await expect(access(path.join(includedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(skippedDir, 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(includedDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(skippedDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
   });
 
   it('emits progress events with adapter names for each render task', async () => {
@@ -585,8 +590,8 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    await expect(access(path.join(materialDir, 'fake.avif'))).resolves.toBeUndefined();
-    await expect(access(path.join(materialDir, 'alt.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'beauty', 'alt.avif'))).resolves.toBeUndefined();
     expect(result.rendererNames.toSorted()).toEqual(['alt', 'fake']);
     expect(result.total).toBe(2);
     expect(result.rendered).toBe(2);
@@ -684,8 +689,8 @@ export function createAdapter() {
       createAdapterModulePngWriter(BLACK_PIXEL_PNG_BASE64),
       'utf8',
     );
-    await writeFile(path.join(materialDir, 'fake.webp'), 'stale webp from previous run', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.avif'), 'stale avif from previous run', 'utf8');
+    await writeBeauty(materialDir, 'fake.webp', 'stale webp from previous run');
+    await writeBeauty(materialDir, 'fake.avif', 'stale avif from previous run');
 
     const result = await createReferences({
       submodulesRoot,
@@ -694,11 +699,11 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    const outputImagePath = path.join(materialDir, 'fake.avif');
-    const outputJsonPath = path.join(materialDir, 'fake.json');
+    const outputImagePath = path.join(materialDir, 'beauty', 'fake.avif');
+    const outputJsonPath = path.join(materialDir, 'beauty', 'fake.json');
     await expect(access(outputImagePath)).rejects.toThrow('ENOENT');
     await expect(access(path.join(materialDir, 'fake-temp.png'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(materialDir, 'fake.webp'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'beauty', 'fake.webp'))).rejects.toThrow('ENOENT');
     await access(outputJsonPath);
     const reportRecord = JSON.parse(await readFile(outputJsonPath, 'utf8')) as Record<string, unknown>;
     const report = parseRenderReport(reportRecord);
@@ -736,7 +741,7 @@ export function createAdapter() {
     await writeFile(materialMtlxPath(materialDir), VALID_MTLX_DOCUMENT, 'utf8');
     await writeFile(path.join(viewerDir, 'san_giuseppe_bridge_2k.hdr'), 'hdr', 'utf8');
     await writeFile(path.join(viewerDir, 'ShaderBall.glb'), 'glb', 'utf8');
-    await writeFile(path.join(materialDir, 'fake.avif'), 'stale avif from previous run', 'utf8');
+    await writeBeauty(materialDir, 'fake.avif', 'stale avif from previous run');
 
     const result = await createReferences({
       submodulesRoot,
@@ -745,7 +750,7 @@ export function createAdapter() {
       concurrency: 1,
     });
 
-    await expect(access(path.join(materialDir, 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(materialDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
     expect(result.rendered).toBe(0);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.error.message).toContain('Renderer failed');
@@ -840,7 +845,7 @@ export function createAdapter() {
     expect(result.rendered).toBe(0);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.error.message).toContain('MaterialX validation failed');
-    await expect(access(path.join(materialDir, 'fake.json'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'beauty', 'fake.json'))).resolves.toBeUndefined();
     expect(state.startCalls).toBe(1);
     expect(state.started).toBe(true);
     expect(state.startOptions).toEqual({
@@ -879,7 +884,7 @@ export function createAdapter() {
     expect(result.rendered).toBe(0);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.error.message).toContain('Unknown node category');
-    await expect(access(path.join(materialDir, 'fake.json'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'beauty', 'fake.json'))).resolves.toBeUndefined();
     expect(state.startCalls).toBe(1);
     expect(state.started).toBe(true);
   });
@@ -919,7 +924,7 @@ export function createAdapter() {
     expect(result.rendered).toBe(0);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.error.message).toContain('Missing texture file');
-    await expect(access(path.join(materialDir, 'fake.json'))).resolves.toBeUndefined();
+    await expect(access(path.join(materialDir, 'beauty', 'fake.json'))).resolves.toBeUndefined();
     expect(state.startCalls).toBe(1);
     expect(state.started).toBe(true);
   });
@@ -952,10 +957,10 @@ export function createAdapter() {
     expect(result.rendered).toBe(1);
     expect(result.failures).toHaveLength(1);
     expect(result.failures[0]?.materialPath).toBe(materialMtlxPath(invalidMaterialDir));
-    await expect(access(path.join(validMaterialDir, 'fake.avif'))).resolves.toBeUndefined();
-    await expect(access(path.join(invalidMaterialDir, 'fake.avif'))).rejects.toThrow('ENOENT');
-    await expect(access(path.join(invalidMaterialDir, 'fake.json'))).resolves.toBeUndefined();
-    await expect(access(path.join(validMaterialDir, 'fake.json'))).resolves.toBeUndefined();
+    await expect(access(path.join(validMaterialDir, 'beauty', 'fake.avif'))).resolves.toBeUndefined();
+    await expect(access(path.join(invalidMaterialDir, 'beauty', 'fake.avif'))).rejects.toThrow('ENOENT');
+    await expect(access(path.join(invalidMaterialDir, 'beauty', 'fake.json'))).resolves.toBeUndefined();
+    await expect(access(path.join(validMaterialDir, 'beauty', 'fake.json'))).resolves.toBeUndefined();
   });
 
   it('continues rendering and writes warnings for URI texture references', async () => {
@@ -1052,7 +1057,7 @@ export function createAdapter() {
     });
 
     const report = parseRenderReport(
-      JSON.parse(await readFile(path.join(materialDir, 'fake.json'), 'utf8')) as unknown,
+      JSON.parse(await readFile(path.join(materialDir, 'beauty', 'fake.json'), 'utf8')) as unknown,
     );
     if (report.status === 'validation_failed') {
       throw new Error('Expected render result report.');
@@ -1098,7 +1103,7 @@ export function createAdapter() {
     ]);
 
     const report = parseRenderReport(
-      JSON.parse(await readFile(path.join(materialDir, 'fake.json'), 'utf8')) as unknown,
+      JSON.parse(await readFile(path.join(materialDir, 'beauty', 'fake.json'), 'utf8')) as unknown,
     );
     if (report.status === 'validation_failed') {
       throw new Error('Expected render result report.');

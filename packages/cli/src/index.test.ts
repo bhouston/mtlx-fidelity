@@ -30,5 +30,5 @@ it('writes a valid OpenCLI document covering the commands', async () => {
 
   const document = JSON.parse(await readFile(output, 'utf8'));
   expect(validate(document)).toEqual({ valid: true, errors: [] });
-  expect(Object.keys(document.commands)).toEqual(expect.arrayContaining(['cli metrics', 'cli render', 'cli docgen']));
+  expect(Object.keys(document.commands)).toEqual(expect.arrayContaining(['cli render', 'cli docgen']));
 });
