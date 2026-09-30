@@ -21,4 +21,4 @@ minimumReleaseAgeExclude:
   - vitest
   - '@clidoc/core@1.1.0'
   - '@clidoc/yargs@1.1.0'
-  - fidelity-kit@0.1.1
+  - fidelity-kit
