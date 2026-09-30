@@ -18,6 +18,8 @@
     "start": "node ./dist/bin.js"
   },
   "dependencies": {
+    "@clidoc/core": "1.1.0",
+    "@clidoc/yargs": "1.1.0",
     "@mtlx-fidelity/core": "workspace:*",
     "@mtlx-fidelity/renderer-blender": "workspace:*",
     "@mtlx-fidelity/renderer-materialxview": "workspace:*",
@@ -27,7 +29,7 @@
     "ink": "^7.0.1",
     "react": "^19.2.5",
     "yargs": "^18.0.0",
-    "yargs-file-commands": "^1.2.2"
+    "yargs-file-commands": "^2.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14"
