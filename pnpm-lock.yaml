@@ -51,6 +51,12 @@ importers:
 
   packages/cli:
     dependencies:
+      '@clidoc/core':
+        specifier: 1.1.0
+        version: 1.1.0
+      '@clidoc/yargs':
+        specifier: 1.1.0
+        version: 1.1.0
       '@mtlx-fidelity/core':
         specifier: workspace:*
         version: link:../core
@@ -79,8 +85,8 @@ importers:
         specifier: ^18.0.0
         version: 18.0.0
       yargs-file-commands:
-        specifier: ^1.2.2
-        version: 1.2.2(yargs@18.0.0)
+        specifier: ^2.1.0
+        version: 2.1.0(yargs@18.0.0)
     devDependencies:
       '@types/react':
         specifier: ^19.2.14
@@ -587,6 +593,14 @@ packages:
 
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
+
+  '@clidoc/core@1.1.0':
+    resolution: {integrity: sha512-RuKMqeFV3oK5gcDjss1kcPu7Lgy2loUWkp23L/JHaNw4CTsjMmwbTy4s0BW8eF42Ve9Lw2A7GzATQykXNteh3g==}
+    engines: {node: '>=22'}
+
+  '@clidoc/yargs@1.1.0':
+    resolution: {integrity: sha512-jtE6J/lPUiyxHGI95Ti+VJ5mO4e/TNX1n6l7H5aKKejWF1DuPclMB3q2ulNjYXxlgthFT4+p6B105hF7OsNflg==}
+    engines: {node: '>=22'}
 
   '@cloudflare/kv-asset-handler@0.4.2':
     resolution: {integrity: sha512-SIOD2DxrRRwQ+jgzlXCqoEFiKOFqaPjhnNTGKXSRLvp1HiOvapLaFG2kEr9dYQTYe8rKrd9uvDUzmAITeNyaHQ==}
@@ -3479,6 +3493,14 @@ packages:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
     engines: {node: '>= 14'}
 
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
   ajv@6.15.0:
     resolution: {integrity: sha512-fgFx7Hfoq60ytK2c7DhnF8jIvzYgOMxfugjLOSMHjLIPgenqa7S7oaagATUq99mV6IYvN2tRmC0wnTYX6iPbMw==}
 
@@ -6292,6 +6314,12 @@ packages:
     peerDependencies:
       yargs: ^17
 
+  yargs-file-commands@2.1.0:
+    resolution: {integrity: sha512-4ips0PL6c2epNK/dF6H+YNDtbdursTpG84ovw73xJFaeaiJgOwFN7awC8WuPcvqo8MCDAy9ztSub61C2tnaUYA==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      yargs: ^18.0.0
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -6595,6 +6623,16 @@ snapshots:
     dependencies:
       hashery: 1.5.1
       keyv: 5.6.0
+
+  '@clidoc/core@1.1.0':
+    dependencies:
+      ajv: 8.20.0
+      ajv-formats: 3.0.1(ajv@8.20.0)
+      yaml: 2.9.1
+
+  '@clidoc/yargs@1.1.0':
+    dependencies:
+      '@clidoc/core': 1.1.0
 
   '@cloudflare/kv-asset-handler@0.4.2': {}
 
@@ -9147,6 +9185,10 @@ snapshots:
   acorn@8.16.0: {}
 
   agent-base@7.1.4: {}
+
+  ajv-formats@3.0.1(ajv@8.20.0):
+    optionalDependencies:
+      ajv: 8.20.0
 
   ajv@6.15.0:
     dependencies:
@@ -11975,14 +12017,13 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  yaml@2.9.1:
-    optional: true
+  yaml@2.9.1: {}
 
   yargs-file-commands@1.2.2(yargs@17.7.3):
     dependencies:
       yargs: 17.7.3
 
-  yargs-file-commands@1.2.2(yargs@18.0.0):
+  yargs-file-commands@2.1.0(yargs@18.0.0):
     dependencies:
       yargs: 18.0.0
 
