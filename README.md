@@ -211,7 +211,7 @@ Production is a Docker image (`docker/results.Dockerfile`, built with `submodule
 
 ## Results introduction
 
-Edit `results/index.md` to update the Markdown introduction above the fidelity comparisons. The `fidelity:process`, `fidelity:dev`, and `fidelity:build` scripts copy it to the sample-library results root before running fidelity-kit. The deployment Dockerfile copies the same source into `/data/index.md`; its build context is the repository root. Renderer descriptions are maintained in this file.
+Edit `submodules/mtlx-sample-library/materials/README.md` (in the sample-library repository) to update the Markdown introduction above the fidelity comparisons. Renderer descriptions are maintained in that file.
 
 ## License
 
