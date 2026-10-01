@@ -6,3 +6,4 @@ packages/viewer/.cache
 *.log
 .DS_Store
 *.pyc
+site
