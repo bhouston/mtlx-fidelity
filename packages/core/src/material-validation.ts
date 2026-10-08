@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { access, writeFile } from 'node:fs/promises';
-import { readMaterialX, validateDocument } from '@material-viewer/mtlx-core';
-import type { MaterialXDocument, MaterialXInput, MaterialXNode } from '@material-viewer/mtlx-core';
+import { materialXNodeRegistry, readMaterialX, validateDocument } from '@material-viewer/mtlx-core';
+import type { MaterialXDocument, MaterialXInput, MaterialXNode, MaterialXNodeSpec } from '@material-viewer/mtlx-core';
 import { RenderValidationReportSchema, type RenderReportIssue } from '@mtlx-fidelity/samples';
 
 const UNKNOWN_NODE_CATEGORY_PREFIX = 'Unknown node category "';
@@ -98,6 +98,13 @@ async function validateTextureInputsForNodes(
   return { fatalIssues, warningIssues };
 }
 
+// Documents may declare their own nodes, as a nodedef implemented by a nodegraph; MaterialX accepts these.
+function getDocumentNodeSpecs(document: MaterialXDocument): MaterialXNodeSpec[] {
+  const nodeDefs = document.nodes.filter((node) => node.category === 'nodedef');
+  const categories = ['nodedef', ...nodeDefs.flatMap((node) => (node.attributes.node ? [node.attributes.node] : []))];
+  return categories.map((category) => ({ category, inputs: [], outputs: [], parameters: [] }));
+}
+
 export async function validateMaterial(materialPath: string): Promise<PreflightResult> {
   const fatalIssues: PreflightIssue[] = [];
   const warningIssues: PreflightIssue[] = [];
@@ -115,7 +122,7 @@ export async function validateMaterial(materialPath: string): Promise<PreflightR
     return { fatalIssues, warningIssues };
   }
 
-  for (const issue of validateDocument(document)) {
+  for (const issue of validateDocument(document, [...materialXNodeRegistry, ...getDocumentNodeSpecs(document)])) {
     const issueRecord: PreflightIssue = {
       materialPath,
       level: issue.level,
