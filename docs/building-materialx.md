@@ -161,6 +161,8 @@ cmake --build "$PWD/build/materialx-osl" --target materialx-osl
 
 The build copies the OSL utility shaders to `build/materialx-osl/bin/resources/Utilities`, which `materialx-osl` needs at runtime.
 
+`materialx-osl` compiles in the absolute paths of `oslc`, `testrender`, the OSL shaders and its own `bin` directory, and the OSL binaries carry an rpath to `build/osl-dist/lib`. If you move or rename the checkout, configure `materialx-osl` again into a fresh build directory, and either rebuild OSL or update the rpaths with `install_name_tool -rpath <old> <new>` followed by `codesign -f -s -`. Also check `otool -L build/osl-dist/lib/liboslexec.dylib`: OSL links Homebrew's `llvm` by path, so a later major LLVM upgrade breaks it until you rebuild or point it at a matching `llvm@<major>` keg with `install_name_tool -change`.
+
 ## Running Fidelity Renders
 
 After the builds are present, no PATH changes are required for the repo-local executables:
