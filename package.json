@@ -20,8 +20,8 @@
     "clean:all": "pnpm clean && rimraf node_modules packages/**/node_modules",
     "prepare": "husky",
     "format": "oxfmt .",
-    "lint": "oxlint packages docs tools vitest.config.ts",
-    "lint:fix": "oxlint --fix packages docs tools vitest.config.ts",
+    "lint": "oxlint --type-aware --type-check packages docs tools vitest.config.ts",
+    "lint:fix": "oxlint --type-aware --type-check --fix packages docs tools vitest.config.ts",
     "tsc": "pnpm build:deps && pnpm -r --if-present --filter './packages/**' tsc",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -46,6 +46,7 @@
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.75.0",
     "oxlint": "^1.90.0",
+    "oxlint-tsgolint": "^7.0.2005",
     "typescript": "7.1.0-beta",
     "vitest": "^5.0.5"
   },
