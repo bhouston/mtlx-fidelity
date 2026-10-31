@@ -1,5 +1,5 @@
 # Serves the fidelity-kit results site. Build context: repository root
-FROM --platform=linux/amd64 node:24-slim
+FROM --platform=linux/amd64 node:26-slim
 
 RUN npm install -g fidelity-kit@2.0.0
 COPY submodules/mtlx-sample-library/materials /data
