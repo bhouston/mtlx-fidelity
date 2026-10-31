@@ -39,7 +39,7 @@ jobs:
         run: |
           tracked=$(git -C submodules/mtlx-sample-library ls-files materials | grep -E '(^|/)(index\.json|image-hashes\.json)$|\.metrics\.json$|\.delta\.(avif|webp)(\.json)?$' || true)
           if [ -n "$tracked" ]; then echo "$tracked" | head; echo '::error::Generated fidelity-kit files must not be committed'; exit 1; fi
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'

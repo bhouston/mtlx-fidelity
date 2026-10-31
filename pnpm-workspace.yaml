@@ -9,7 +9,7 @@ allowBuilds:
   puppeteer: true
   sharp: true
 
-link-workspace-packages: false
+linkWorkspacePackages: false
 
 minimumReleaseAgeExclude:
   - humanize-units
