@@ -20,6 +20,12 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Checkout workspace submodules
+        # pnpm 12 requires every workspace project directory (submodules/three.js, material-viewer) to exist.
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule sync -- submodules/material-viewer submodules/three.js
+          git submodule update --init --depth 1 submodules/material-viewer submodules/three.js
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
