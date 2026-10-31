@@ -1,0 +1,16 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [],
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false,
+    "rootDir": "${configDir}"
+  },
+  "include": ["${configDir}/src/**/*"]
+}

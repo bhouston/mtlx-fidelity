@@ -151,7 +151,7 @@ async function createInterfaceValidator(query: ViewerQuery): Promise<unknown> {
 }
 
 function disposeMaterialTextures(material: THREE.Material): void {
-  const candidate = material as Record<string, unknown>;
+  const candidate = material as unknown as Record<string, unknown>;
   for (const value of Object.values(candidate)) {
     if (!value || typeof value !== 'object') {
       continue;
@@ -268,7 +268,7 @@ async function buildScene(): Promise<void> {
     if (sceneForCleanup) {
       sceneForCleanup.clear();
     }
-    rendererForCleanup?.dispose();
+    void rendererForCleanup?.dispose();
     const domElement = rendererForCleanup?.domElement;
     domElement?.parentElement?.removeChild(domElement);
     globalThis.__MTLX_FORCE_RENDER__ = undefined;
@@ -283,7 +283,7 @@ async function buildScene(): Promise<void> {
   renderer.setSize(REFERENCE_IMAGE_WIDTH, REFERENCE_IMAGE_HEIGHT, false);
   renderer.toneMapping = THREE.NoToneMapping;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.setClearColor(new THREE.Color(backgroundR, backgroundG, backgroundB), 1);
+  renderer.setClearColor(new THREE.Color(backgroundR ?? 0, backgroundG ?? 0, backgroundB ?? 0), 1);
   mount.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
