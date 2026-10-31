@@ -190,6 +190,8 @@ function InkCreateReferencesApp({ args, onComplete, onError }: InkCreateReferenc
     };
   }, [args, exit, onComplete, onError]);
 
+  // elapsed time is intentionally re-read on each (timer-driven) render
+  // oxlint-disable-next-line react/purity
   const elapsedSeconds = Math.max(0, (Date.now() - startedAt) / 1000);
   const active = Math.max(0, started - completed);
   const effectiveCompleted = Math.min(total, completed + active * 0.5);
