@@ -46,7 +46,7 @@
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.75.0",
     "oxlint": "^1.90.0",
-    "typescript": "^7.0.2",
+    "typescript": "7.1.0-beta",
     "vitest": "^5.0.5"
   },
   "lint-staged": {
