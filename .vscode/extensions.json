@@ -1,10 +1,11 @@
 {
   "recommendations": [
-    "benhouston3d.mtlx-vscode-extension",
-    "benhouston3d.hdrify-vscode-extension",
-    "vitest.explorer",
     "oxc.oxc-vscode",
+    "typescriptteam.native-preview",
+    "vitest.explorer",
     "github.vscode-github-actions",
-    "typescriptteam.native-preview"
-  ]
+    "benhouston3d.mtlx-vscode-extension",
+    "benhouston3d.hdrify-vscode-extension"
+  ],
+  "unwantedRecommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "biomejs.biome"]
 }
