@@ -130,7 +130,7 @@ function splitPath(path: string): { basePath: string; fileName: string } {
   }
 
   return {
-    basePath: `${normalized.slice(0, separatorIndex + 1)}`,
+    basePath: normalized.slice(0, separatorIndex + 1),
     fileName: normalized.slice(separatorIndex + 1),
   };
 }
@@ -181,7 +181,7 @@ function disposeObject3DResources(root: THREE.Object3D): void {
       return;
     }
     if (meshMaterial && typeof meshMaterial === 'object' && (meshMaterial as { isMaterial?: boolean }).isMaterial) {
-      materials.add(meshMaterial as THREE.Material);
+      materials.add(meshMaterial);
     }
   });
 
@@ -339,7 +339,7 @@ async function buildScene(): Promise<void> {
   if (calibrationMesh?.isMesh && previewMesh?.isMesh) {
     calibrationMesh.material = resolvedMaterial;
     previewMesh.material = resolvedMaterial;
-    if ((resolvedMaterial as THREE.Material).transparent) {
+    if (resolvedMaterial.transparent) {
       calibrationMesh.renderOrder = 1;
       previewMesh.renderOrder = 2;
     }
