@@ -7,3 +7,8 @@ packages/viewer/.cache
 .DS_Store
 *.pyc
 site
+
+# Agent tooling
+.claude/
+.codex/
+.cursor/
